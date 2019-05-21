@@ -1,0 +1,210 @@
+/*///////////////////////////////// Widget Styles ///////////////////////////////// */
+*, *::after, *::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html {
+  font-size: 16px;
+}
+body{
+  font-family: 'Conv_apercu_regular','Helvetica','Sans-Serif','Arial';
+}
+/* Text  */
+p, span{
+  font-size: .875rem;
+  line-height: 1.5em;
+}
+h4, h5, h6{
+  margin-bottom: .5em;
+  font-weight: bold;
+}
+h4{
+  font-size: .875rem;
+}
+.note{
+  opacity: .6;
+}
+
+
+/*///////////////////////////////// Buttons ///////////////////////////////// */
+.btn{
+  outline: 0;
+  font-size: .875rem;
+  border: 1px solid transparent;
+  padding: .625rem 1rem;
+  border-radius: 1.5rem;
+  cursor: pointer;
+  outline: 0;
+  box-shadow: 0 .25rem .5rem rgba(0,0,0,.2);
+  transition: background-color ease-in-out .2s, opacity ease-in-out .1s, transform ease-in-out .1s;
+}
+.btn:focus{
+  outline: 0;
+}
+.btn:active{
+  opacity: .5;
+  transform: scale(.98);
+  outline: 0;
+}
+.check-in .btn:active{
+  opacity: 1;
+  transform: scale(.98);
+  outline: 0;
+}
+.btn--icon{
+  width: 2.5rem;
+  height: 2.5rem; 
+  border-radius: .25rem;
+  background-color: inherit;
+  font-size: 1.125rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: none;
+}
+.btn--transparent{
+  box-shadow: none;
+  background-color: transparent;
+}
+/*///////////////////////////////// Text Input ///////////////////////////////// */
+input[type="text"]{
+  text-align: left;
+  display: block;
+  width: 100%;
+  outline: 0;
+  min-height: 2rem;
+  padding: .875rem .75rem;
+  font-size: .875rem;
+  border: 0;
+}
+/*///////////////////////////////// Plugin Navigation ///////////////////////////////// */
+.plugin__nav{
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #fff;
+  box-shadow: 0 .125rem .25rem 0 rgba(0,0,0,0.03);
+  width: calc(100% - 2rem);
+  margin: 1rem;
+  border-radius: .5rem;
+  height: 3rem;
+  overflow: hidden;
+  border: 1px solid rgba(151,151,151,0.2);
+}
+.plugin__nav nav{
+  display: flex;
+  position: absolute;
+  top: 0;
+}
+.plugin__nav nav .btn{
+  border-radius: 0;
+}
+.plugin__nav .btn--icon{
+  height: 3rem;
+}
+.plugin__nav nav .btn--icon{
+  width: 3.5rem;
+}
+.plugin__nav .search__input{
+  width: calc(100% - 2.5rem);
+  display: none;
+}
+.search__buttons{
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.search__buttons .search__clear{
+  display: none;
+}
+/*///////////////////////////////// Plugin Container ///////////////////////////////// */
+.plugin__container {
+  margin-top: 5rem;
+  padding: 1rem 0;
+}
+.plugin__container a{
+  font-size: .875rem;
+  cursor: pointer;
+}
+/*///////////////////////////////// Grid ///////////////////////////////// */
+.grid{
+  display: grid;
+  padding: 1rem 0;
+}
+.grid--img{
+  grid-column-gap: .125rem;
+  grid-row-gap: .125rem;
+}
+.group__date{
+  margin: .5rem 1rem 0 1rem;
+  font-size: .75rem;
+}
+.img__holder{
+  overflow: hidden;
+  cursor: pointer;
+}
+.img__holder img{
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+/* Grid 1 */
+.grid--img.grid--1{
+  grid-template-columns: repeat(auto-fill,minmax(calc(25vw - .125rem),1fr));
+}
+.grid--img.grid--1 .img__holder{
+  height: calc(25vw - .125rem);
+}
+/* Grid 2 */
+.grid--img.grid--2{
+  grid-template-columns: repeat(auto-fill,minmax(calc(33.333vw - .125rem),1fr));
+}
+.grid--img.grid--2 .img__holder{
+  height: calc(33.333vw - .125rem);
+}
+/* Grid 3 */
+.grid--img.grid--3{
+  grid-template-columns: repeat(auto-fill,minmax(calc(50vw - .125rem),1fr));
+}
+.grid--img.grid--3 .img__holder{
+  height: calc(50vw - .125rem);
+}
+
+/*///////////////////////////////// Full Screen Media Holder ///////////////////////////////// */
+.media__holder{
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  background-color: #000;
+  align-items: center;
+}
+.media__holder img{
+  width: 100%;
+}
+/*///////////////////////////////// Header Actions ///////////////////////////////// */
+.header__actions, 
+.footer__actions{
+  position: absolute;
+  width: 100%;
+}
+/*///////////////////////////////// Header Actions ///////////////////////////////// */
+.header__actions, 
+.footer__actions{
+  position: absolute;
+  width: 100%;
+}
+
+/*///////////////////////////////// Helper Styles ///////////////////////////////// */
+.ellipsis{
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.btn-primary{
+  background-color: #334ddf;
+  color: #fff;
+}
+.backgroundColorTheme{
+  background-color: #fff;
+}
