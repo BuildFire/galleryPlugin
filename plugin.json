@@ -1,0 +1,23 @@
+{
+  "author": "BuildFire",
+  "pluginName": "Image Gallery 2",
+  "pluginDescription": "Track check-ins made by people from your organization",
+  "supportEmail": "support@buildfire.com",
+  "supportSite":"",
+  "offlineModeEnabled": true,
+  "control": {
+    "content": {
+      "enabled": true
+    },
+    "design": {
+      "enabled": false
+    },
+    "settings": {
+      "enabled": false
+    }
+  },
+  "widget": {
+  },
+  "features": [],
+  "languages": ["en"]
+}
