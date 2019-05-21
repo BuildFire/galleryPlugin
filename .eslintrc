@@ -6,6 +6,8 @@
     "node": true
   },
   "rules": {
+    "arrow-parens": ["error", "as-needed"],
+    "object-curly-newline": "off",
     "no-param-reassign": 0,
     "comma-dangle": 0,
     "consistent-return": 0,
@@ -13,6 +15,10 @@
     "import/no-duplicates": false,
     "import/no-named-as-default-member": false,
     "import/no-named-as-default": false,
+    "jsx-a11y/interactive-supports-focus": false,
+    "jsx-a11y/click-events-have-key-events": false,
+    "jsx-a11y/no-static-element-interactions": false,
+    "jsx-a11y/no-noninteractive-element-interactions": false,
     "react/jsx-filename-extension": false,
     "react/jsx-one-expression-per-line": false,
     "react/jsx-closing-bracket-location": false,
