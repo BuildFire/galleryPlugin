@@ -1,2 +1,2 @@
 # galleryplugin
-Gallery Plugin for images
+Gallery Plugin for images 2
