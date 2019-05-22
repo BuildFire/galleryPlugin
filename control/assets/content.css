@@ -293,6 +293,13 @@ span {
   float: none!important;
   width: 2.5rem;
   height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.draggable-list-view .d-item .media-holder .icon{
+  font-size: 1.25rem;
+
 }
 .draggable-list-view .d-item .media-holder img {
   width: 100%;
@@ -313,9 +320,11 @@ span {
 }
 .draggable-list-view .d-item .copy h4,
 .draggable-list-view .d-item .copy h5{
-  margin: 0 1rem;
-  flex-shrink: 0;
+  margin: 0 1rem 0 0;
   font-size: .875rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .draggable-list-view .d-item .copy .title {
   flex: auto;
@@ -372,4 +381,9 @@ span {
 }
 .draggable-list-view .d-item span.btn-icon.btn-danger:hover {
   color: red;
+}
+.ellipsis{
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
