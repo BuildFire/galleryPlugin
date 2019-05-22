@@ -9,12 +9,7 @@
   <link rel="stylesheet" type="text/css" media="screen" href="../assets/content.css">
 </head>
 <body>
-    <h1 class="title">Edit Folder</h1>
-
-    <div class="input__group">
-      <label for="">Folder Name</label>
-      <input type="text" >
-    </div>
+    <h1 class="title">Files</h1>
     <section class="image__grid">
       <button class="btn btn--add">Add Images</button>
       <div class="carousel-items hide-empty draggable-list-view grid">
@@ -49,5 +44,25 @@
       </div>
     </section>
   
-</body>
+    <h1 class="title">Folders</h1>
+  
+    <button class="btn btn--primary">Create Folder</button>
+    
+    <div class="carousel-items hide-empty draggable-list-view row">
+      <div class="folder d-item" role="button">
+        <span class="icon icon-menu cursor-grab pull-left"></span>
+        <div class="media-holder pull-left">
+          <img src="https://czi3m2qn.cloudimg.io/s/resizenp/80x40/https://pluginserver.buildfire.com/plugins/ffa71433-c451-43c8-9666-52080e2479c7/resources/icon.png">
+        </div>
+        <div class="copy">
+          <h5>New Folder</h5>
+          <div class="actions">
+            <button class="btn btn--icon"><span class="icon icon-pencil"></span></button>
+            <span class="btn-icon btn-delete-icon btn-danger"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  </body>
 </html>
