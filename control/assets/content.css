@@ -255,7 +255,15 @@ section.image__grid{
 }
 
 .image.selected {
-  border: 5px solid blue;
+  border: .25rem solid #05acf0;
+}
+.image.selected::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255,255,255,.5);
+  z-index: 2;
 }
 span {
   position: relative;
@@ -386,4 +394,38 @@ span {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+/* Modal */
+.modal .carousel-items.grid .image{
+  cursor: pointer;
+}
+.modal .carousel-items.grid .image .btn{
+  display: none;
+}
+.modal .carousel-items.grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  margin: 0 0 1.5rem 0;
+}
+.modal .modal-content{
+  position: relative;
+  background-color: #fff;
+  outline: 0;
+  border-radius: 4px;
+}
+.modal .modal-content .modal-body{
+  padding: 1rem;
+}
+.modal .modal__footer{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.modal .modal__footer .btn{
+  margin-left: 1rem;
+}
+.modal-dialog {
+  position: relative;
+  width: auto;
+  padding: 1rem;
 }
