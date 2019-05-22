@@ -138,7 +138,11 @@ input{
 .btn--add:hover{
   background-color: #14cb5d;
 }
-
+.btn--icon.btn--close{
+  position: absolute;
+  right: 0;
+  top: 1rem;
+}
 
 /* Links */
 .link{
