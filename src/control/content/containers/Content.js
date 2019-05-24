@@ -3,9 +3,9 @@ import { hot } from 'react-hot-loader/root';
 import { Route, Router } from 'react-router-dom';
 import EditFolder from './EditFolder';
 import Home from './Home';
-import { Datastore, Image, Folder, History } from '../content.controller';
+import { Datastore, Img, Folder, History } from '../content.controller';
 
-const { imageLib, history } = window.buildfire;
+const { imageLib, history, notifications, messaging } = window.buildfire;
 class Content extends Component {
   constructor(props) {
     super(props);
@@ -22,17 +22,36 @@ class Content extends Component {
     const onSubmit = (err, result) => {
       if (err) throw err;
       const { selectedFiles } = result;
-      const newImages = selectedFiles.map(src => new Image({ src }));
 
-      this.setState(state => {
-        let { images } = { ...state };
-        images = [...images, ...newImages];
+      const imagePromises = selectedFiles.map(src => new Promise(resolve => {
+        const image = new Image();
+        image.onload = () => resolve(image);
+        image.src = `https://czi3m2qn.cloudimg.io/cdn/n/n/${src}`;
+        image.originalSrc = src;
+      }));
 
-        return { images };
-      }, () => this.saveWithDelay());
+      Promise.all(imagePromises).then(imgs => {
+        const newImages = imgs.map(({ naturalWidth, naturalHeight, originalSrc }) => new Img({
+          src: originalSrc,
+          width: naturalWidth,
+          height: naturalHeight
+        }));
+
+        this.setState(
+          state => {
+            let { images } = { ...state };
+            images = [...images, ...newImages];
+  
+            return { images };
+          },
+          () => this.saveWithDelay()
+        );
+      });
     };
+
+
     imageLib.showDialog(dialogOptions, onSubmit);
-  }
+  };
 
   addFolder = () => {
     const afterStateChange = () => {
@@ -40,25 +59,76 @@ class Content extends Component {
       this.saveWithDelay();
     };
 
-    this.setState(state => {
-      const { folders } = { ...state };
-      const folder = new Folder({});
-      folders.push(folder);
-      return { folder, folders };
-    }, () => afterStateChange());
-  }
+    this.setState(
+      state => {
+        const { folders } = { ...state };
+        const folder = new Folder({});
+        folders.push(folder);
+        return { folder, folders };
+      },
+      () => afterStateChange()
+    );
+  };
+
+  removeFolder = (e, folder) => {
+    e.stopPropagation();
+
+    const { id, name } = folder;
+    const dialogOptions = {
+      title: `Delete ${name}?`,
+      message: `Are you sure you want to delete ${name}? This cannot be undone!`,
+      confirmButton: {
+        text: 'Delete',
+        key: 'confirm',
+        type: 'danger'
+      }
+    };
+
+    const dialogCallback = (err, result) => {
+      const key = result && result.selectedButton ? result.selectedButton.key : err;
+
+      if (key === 'confirm' || key === 1 || key === true) {
+        this.setState(
+          state => {
+            let { folders } = { ...state };
+            folders = folders.filter(f => f.id !== id);
+
+            return { folders };
+          },
+          () => this.saveWithDelay()
+        );
+      }
+    };
+
+    notifications.confirm(dialogOptions, dialogCallback);
+  };
 
   addImages = images => {
-    this.setState(state => {
-      const { folder } = { ...state };
+    this.setState(
+      state => {
+        const { folder, folders } = { ...state };
+        folder.images = [...folder.images, ...images];
 
-      folder.images = [...folder.images, ...images];
+        const index = folders.findIndex(({ id }) => id === folder.id);
+        folders[index] = folder;
 
-      return { folder };
-    }, () => this.saveWithDelay());
+        return { folder, folders };
+      },
+      () => this.saveWithDelay()
+    );
+  };
+
+  openFolder = folder => {
+    const afterStateChange = () => {
+      History.replace('/folder');
+      const message = {
+        type: 'folder',
+        folder
+      };
+      messaging.sendMessageToWidget(message);
+    };
+    this.setState(() => ({ folder }), () => afterStateChange());
   }
-
-  openFolder = folder => this.setState(() => ({ folder }), History.replace('/folder'));
 
   handleReorder = e => {
     const { images } = { ...this.state };
@@ -70,51 +140,74 @@ class Content extends Component {
   };
 
   handleFolderReorder = e => {
-    const { folder } = { ...this.state };
     const { oldIndex, newIndex } = e;
 
-    folder.images.splice(newIndex, 0, folder.images.splice(oldIndex, 1)[0]);
+    this.setState(state => {
+      const { folder, folders } = { ...state };
+      folder.images.splice(newIndex, 0, folder.images.splice(oldIndex, 1)[0]);
 
-    this.setState(() => ({ folder }), () => this.saveWithDelay());
-  }
+      const index = folders.findIndex(({ id }) => id === folder.id);
+      folders[index] = folder;
+
+      return { folder, folders };
+    }, () => this.saveWithDelay());
+  };
 
   removeImage = src => {
-    this.setState(state => {
-      let { images, folders } = { ...state };
-      images = images.filter(image => image.src !== src);
-      folders = folders.map(folder => {
-        folder.images = folder.images.filter(image => image.src !== src);
-        return folder;
-      });
-      return { images, folders };
-    }, () => this.saveWithDelay());
-  }
+    this.setState(
+      state => {
+        let { images, folders } = { ...state };
+        images = images.filter(image => image.src !== src);
+        folders = folders.map(folder => {
+          folder.images = folder.images.filter(image => image.src !== src);
+          return folder;
+        });
+        return { images, folders };
+      },
+      () => this.saveWithDelay()
+    );
+  };
 
   removeImageFromFolder = src => {
-    this.setState(state => {
-      const { folder } = { ...state };
-      folder.images = folder.images.filter(image => image.src !== src);
-      return { folder };
-    }, () => this.saveWithDelay());
+    this.setState(
+      state => {
+        const { folder, folders } = { ...state };
+        folder.images = folder.images.filter(image => image.src !== src);
+
+        const index = folders.findIndex(({ id }) => id === folder.id);
+        folders[index] = folder;
+
+        return { folder, folders };
+      },
+      () => this.saveWithDelay()
+    );
+  };
+
+  goHome = () => {
+    History.replace('/');
+    const message = {
+      type: 'home'
+    };
+    messaging.sendMessageToWidget(message);
   }
 
   saveWithDelay = () => {
     const { folders, images } = { ...this.state };
     const obj = { images, folders };
-    this.Datastore.saveWithDelay(obj, (err, result) => {
+    this.Datastore.saveWithDelay(obj, err => {
       if (err) throw err;
-      console.warn(result);
     });
-  }
+    localStorage.setItem('gallery.cache', JSON.stringify(this.state));
+  };
 
   handleInputChange = e => {
     const { name, value } = e.target;
     this.setState(state => {
       const { folder } = { ...state };
       folder[name] = value;
-      return ({ folder });
-    });
-  }
+      return { folder };
+    }, () => this.saveWithDelay());
+  };
 
   componentDidUpdate = () => console.warn(this.state);
 
@@ -127,14 +220,18 @@ class Content extends Component {
         throw err;
       }
       const { images, folders } = result.data;
-      this.setState(() => ({ images, folders }));
+      if (images && folders) {
+        this.setState(() => ({ images, folders }));
+      }
     };
     history.onPop(breadcrumb => console.warn(breadcrumb));
+    const cache = localStorage.getItem('gallery.cache');
+    if (cache) loadData({ data: JSON.parse(cache) });
     this.Datastore.get(loadData);
     this.Datastore.onUpdate(loadData);
 
     // this.Datastore.saveWithDelay({ images: [], folders: [] }, () => { });
-  }
+  };
 
   render() {
     const { images, folders, folder } = this.state;
@@ -150,6 +247,7 @@ class Content extends Component {
               folders={folders}
               removeImage={this.removeImage}
               addFolder={this.addFolder}
+              removeFolder={this.removeFolder}
               openFolder={this.openFolder}
               showImageDialog={this.showImageDialog}
               handleReorder={this.handleReorder}
@@ -163,11 +261,12 @@ class Content extends Component {
             <EditFolder
               galleryImages={images}
               folder={folder}
-              history={History}
+              goHome={this.goHome}
               removeImageFromFolder={this.removeImageFromFolder}
               handleFolderReorder={this.handleFolderReorder}
               addImages={this.addImages}
-              handleInputChange={this.handleInputChange} />
+              handleInputChange={this.handleInputChange}
+            />
           )}
         />
       </Router>

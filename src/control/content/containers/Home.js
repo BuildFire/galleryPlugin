@@ -2,9 +2,17 @@ import React from 'react';
 import ImageList from './ImageList';
 import FolderList from './FolderList';
 
-const Home = ({ images, removeImage, folders, showImageDialog, addFolder, openFolder, handleReorder }) => (
-  <div>
-    <button onClick={showImageDialog} type="button">Add Image</button>
+const Home = ({
+  images,
+  removeImage,
+  folders,
+  showImageDialog,
+  addFolder,
+  removeFolder,
+  openFolder,
+  handleReorder
+}) => (
+  <>
     <ImageList
       images={images}
       removeImage={removeImage}
@@ -14,11 +22,11 @@ const Home = ({ images, removeImage, folders, showImageDialog, addFolder, openFo
     <FolderList
       folders={folders}
       addFolder={addFolder}
+      removeFolder={removeFolder}
       openFolder={openFolder}
       // handleReorder={handleReorder}
     />
-  </div>
+  </>
 );
-
 
 export default Home;

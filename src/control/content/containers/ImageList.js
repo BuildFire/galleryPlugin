@@ -1,15 +1,22 @@
 import React from 'react';
-import { Image, SortableList } from '../components/utils';
+import LazyLoad from 'react-lazy-load';
+import { SortableList } from '../components/utils';
+import Image from '../components/Image';
 
-const ImageList = ({ images, removeImage, handleReorder }) => (
-  <>
-    {/* <button onClick={showImageDialog} type="button">Add Image</button> */}
+const ImageList = ({ images, showImageDialog, removeImage, handleReorder }) => (
+  <section className="image__grid">
+    {/* <h1 className="title">Files</h1> */}
+    <button onClick={showImageDialog} className="btn btn--add" type="button">
+      Add Images
+    </button>
     <SortableList group="grid" handleReorder={handleReorder}>
-      {
-        images.map(({ src }) => <Image key={src} src={src} removeImage={removeImage} />)
-      }
+      {images && images.map(({ id, src }) => (
+        <LazyLoad key={id}>
+          <Image src={src} removeImage={removeImage} />
+        </LazyLoad>
+      ))}
     </SortableList>
-  </>
+  </section>
 );
 
 export default ImageList;

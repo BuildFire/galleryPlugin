@@ -15,11 +15,20 @@ class EditFolder extends Component {
 
   handleAddImages = () => {
     const { addImages } = this.props;
-    const { galleryImages } = { ...this.state };
-    const selectImages = galleryImages.filter(image => image.selected);
+    this.setState(state => {
+      let { galleryImages } = { ...state };
+      const selectImages = galleryImages.filter(image => image.selected);
 
-    addImages(selectImages);
-  }
+      addImages(selectImages);
+
+      galleryImages = galleryImages.map(img => {
+        img.selected = false;
+        return img;
+      });
+
+      return { galleryImages };
+    });
+  };
 
   selectImage = src => {
     this.setState(state => {
@@ -30,46 +39,54 @@ class EditFolder extends Component {
 
       return { galleryImages };
     });
-  }
-
-  componentDidUpdate = () => console.warn('editfolder', this.state);
+  };
 
   render() {
-    const { folder, removeImageFromFolder, handleFolderReorder, history, handleInputChange } = this.props;
+    const {
+      folder,
+      removeImageFromFolder,
+      handleFolderReorder,
+      goHome,
+      handleInputChange
+    } = this.props;
     const { showModal, galleryImages } = this.state;
     const { images, name } = folder;
 
     return (
       <>
-        <h2>Edit Folder</h2>
-        <span onClick={() => history.replace('/')}>X</span>
-        <Input name="name" value={name} onChange={handleInputChange} />
-        <button type="button" onClick={this.toggleImagesModal}>Add Images</button>
+        <h1 className="title">Edit Folder</h1>
+        <button
+          className="btn btn--icon btn--close"
+          onClick={goHome}
+          type="button"
+        >
+          <span className="icon icon-cross2" />
+        </button>
+
+        <div className="input__group">
+          <label htmlFor="name">Folder Name</label>
+          <Input name="name" value={name} onChange={handleInputChange} />
+        </div>
 
         <ImageList
           images={images}
+          showImageDialog={this.toggleImagesModal}
           removeImage={removeImageFromFolder}
           handleReorder={handleFolderReorder}
         />
 
         <Modal show={showModal} toggle={this.toggleImagesModal}>
           <div className="carousel-items grid">
-            {
-              galleryImages.map(({ src, selected }) => {
-                if (!images.find(img => img.src === src)) {
-                  return (
-                    <Image
-                      key={src}
-                      src={src}
-                      selected={selected}
-                      onClick={this.selectImage}
-                    />
-                  );
-                }
-              })
-            }
+            {galleryImages.map(({ src, selected }) => {
+              if (!images.find(img => img.src === src)) {
+                return <Image key={src} src={src} selected={selected} onClick={this.selectImage} />;
+              }
+              return null;
+            })}
           </div>
-          <button onClick={this.handleAddImages}>Add</button>
+          <button onClick={this.handleAddImages} type="button">
+            Add
+          </button>
         </Modal>
       </>
     );
