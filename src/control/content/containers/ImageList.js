@@ -1,7 +1,6 @@
 import React from 'react';
 import LazyLoad from 'react-lazy-load';
-import { SortableList } from '../components/utils';
-import Image from '../components/Image';
+import { SortableList, Image } from '../components';
 
 const ImageList = ({ images, showImageDialog, removeImage, handleReorder }) => (
   <section className="image__grid">

@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { hot } from 'react-hot-loader/root';
 import { Route, Router } from 'react-router-dom';
-import EditFolder from './EditFolder';
-import Home from './Home';
-import { Datastore, Img, Folder, History } from '../content.controller';
+
+import { Folder, Img, History, Datastore } from '../scripts';
+import { Home, EditFolder } from '.';
 
 const { imageLib, history, notifications, messaging } = window.buildfire;
+
 class Content extends Component {
   constructor(props) {
     super(props);
@@ -23,32 +24,35 @@ class Content extends Component {
       if (err) throw err;
       const { selectedFiles } = result;
 
-      const imagePromises = selectedFiles.map(src => new Promise(resolve => {
-        const image = new Image();
-        image.onload = () => resolve(image);
-        image.src = `https://czi3m2qn.cloudimg.io/cdn/n/n/${src}`;
-        image.originalSrc = src;
-      }));
+      const imagePromises = selectedFiles.map(
+        src => new Promise(resolve => {
+          const image = new Image();
+          image.onload = () => resolve(image);
+          image.src = `https://czi3m2qn.cloudimg.io/cdn/n/n/${src}`;
+          image.originalSrc = src;
+        })
+      );
 
       Promise.all(imagePromises).then(imgs => {
-        const newImages = imgs.map(({ naturalWidth, naturalHeight, originalSrc }) => new Img({
-          src: originalSrc,
-          width: naturalWidth,
-          height: naturalHeight
-        }));
+        const newImages = imgs.map(
+          ({ naturalWidth, naturalHeight, originalSrc }) => new Img({
+            src: originalSrc,
+            width: naturalWidth,
+            height: naturalHeight
+          })
+        );
 
         this.setState(
           state => {
             let { images } = { ...state };
             images = [...images, ...newImages];
-  
+
             return { images };
           },
           () => this.saveWithDelay()
         );
       });
     };
-
 
     imageLib.showDialog(dialogOptions, onSubmit);
   };
@@ -128,7 +132,7 @@ class Content extends Component {
       messaging.sendMessageToWidget(message);
     };
     this.setState(() => ({ folder }), () => afterStateChange());
-  }
+  };
 
   handleReorder = e => {
     const { images } = { ...this.state };
@@ -142,15 +146,18 @@ class Content extends Component {
   handleFolderReorder = e => {
     const { oldIndex, newIndex } = e;
 
-    this.setState(state => {
-      const { folder, folders } = { ...state };
-      folder.images.splice(newIndex, 0, folder.images.splice(oldIndex, 1)[0]);
+    this.setState(
+      state => {
+        const { folder, folders } = { ...state };
+        folder.images.splice(newIndex, 0, folder.images.splice(oldIndex, 1)[0]);
 
-      const index = folders.findIndex(({ id }) => id === folder.id);
-      folders[index] = folder;
+        const index = folders.findIndex(({ id }) => id === folder.id);
+        folders[index] = folder;
 
-      return { folder, folders };
-    }, () => this.saveWithDelay());
+        return { folder, folders };
+      },
+      () => this.saveWithDelay()
+    );
   };
 
   removeImage = src => {
@@ -189,7 +196,7 @@ class Content extends Component {
       type: 'home'
     };
     messaging.sendMessageToWidget(message);
-  }
+  };
 
   saveWithDelay = () => {
     const { folders, images } = { ...this.state };
@@ -202,11 +209,14 @@ class Content extends Component {
 
   handleInputChange = e => {
     const { name, value } = e.target;
-    this.setState(state => {
-      const { folder } = { ...state };
-      folder[name] = value;
-      return { folder };
-    }, () => this.saveWithDelay());
+    this.setState(
+      state => {
+        const { folder } = { ...state };
+        folder[name] = value;
+        return { folder };
+      },
+      () => this.saveWithDelay()
+    );
   };
 
   componentDidUpdate = () => console.warn(this.state);

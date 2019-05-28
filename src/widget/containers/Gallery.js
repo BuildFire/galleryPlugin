@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import LazyLoad from 'react-lazy-load';
-import Image from '../components';
+import { Image } from '../components';
 
 class Gallery extends PureComponent {
   constructor(props) {
@@ -30,6 +30,7 @@ class Gallery extends PureComponent {
                 const thumbnail = { src, height, width: window.innerWidth / 3 };
                 return (
                   <LazyLoad
+                    key={image.id}
                     width={this.width}
                     height={this.width}
                     debounce

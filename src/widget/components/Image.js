@@ -8,9 +8,6 @@ export default class Image extends PureComponent {
   }
 
   openImage = () => {
-    // const { src } = this.props;
-    // const { imagePreviewer } = window.buildfire;
-    // imagePreviewer.show({ images: [src] });
     const { viewImage, image } = this.props;
     viewImage(image.src);
   };
@@ -31,9 +28,6 @@ export default class Image extends PureComponent {
   render() {
     const { image } = this.props;
     const { src, width } = image;
-
-    // const preloadWidth = Math.round(width / 2);
-    // const finalWidth = Math.round(width * window.devicePixelRatio);
 
     const placeholderSrc = `https://czi3m2qn.cloudimg.io/crop/${Math.floor(width / 2)}x${Math.floor(width / 2)}/q10.fgaussian6/${src}`;
     const finalSrc = `https://czi3m2qn.cloudimg.io/crop/${width * window.devicePixelRatio}x${width * window.devicePixelRatio}/q100/${src}`;

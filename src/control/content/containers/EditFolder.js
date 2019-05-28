@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Modal, Image, Input } from '../components/utils';
-import ImageList from './ImageList';
+import { Image, Modal, Input } from '../components';
+import { ImageList } from '.';
 
 class EditFolder extends Component {
   constructor(props) {
@@ -33,7 +33,7 @@ class EditFolder extends Component {
   selectImage = src => {
     this.setState(state => {
       const { galleryImages } = { ...state };
-
+      debugger
       const index = galleryImages.findIndex(image => image.src === src);
       galleryImages[index].selected = !galleryImages[index].selected;
 

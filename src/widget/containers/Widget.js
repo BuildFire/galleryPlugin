@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 import { hot } from 'react-hot-loader/root';
 import { Route, Router } from 'react-router-dom';
-import { Datastore, History } from '../widget.controller';
-import Gallery from './Gallery';
-import Folders from './Folders';
-import Folder from './Folder';
-import NavBar from '../components/NavBar';
-import ImageViewer from './ImageViewer';
+import { createMemoryHistory } from 'history';
+
 import PhotoSwipe from '../assets/photoswipe.min.js';
 import photoSwipeUIdefault from '../assets/photoswipe-ui-default.min.js';
 
+import { ViewFolder, Folders, Gallery, NavBar, PswpGallery } from '.';
+
 const {
+  datastore,
   messaging,
   history,
   navigation,
@@ -25,7 +24,7 @@ const {
 class Widget extends Component {
   constructor(props) {
     super(props);
-    this.Datastore = new Datastore();
+    this.History = createMemoryHistory();
     this.gallery = null;
     this.state = {
       images: [],
@@ -71,7 +70,9 @@ class Widget extends Component {
     const galleryItems = (folderImages || images).map(img => ({
       w: img.width,
       h: img.height,
-      msrc: `https://czi3m2qn.cloudimg.io/crop/${Math.floor(img.width / 2)}x${Math.floor(img.height / 2)}/q10.fgaussian4/${img.src}`,
+      msrc: `https://czi3m2qn.cloudimg.io/crop/${Math.floor(img.width / 2)}x${Math.floor(
+        img.height / 2
+      )}/q10.fgaussian4/${img.src}`,
       src: `https://czi3m2qn.cloudimg.io/crop/${img.width * window.devicePixelRatio}x${img.height
         * window.devicePixelRatio}/q150/${img.src}`,
       sourceImg: img.src
@@ -121,7 +122,7 @@ class Widget extends Component {
   };
 
   navigateTo = path => {
-    History.replace(path || '/');
+    this.History.replace(path || '/');
     history.push(path, { elementToShow: path });
   };
 
@@ -161,7 +162,7 @@ class Widget extends Component {
         throw err;
       }
       const { images, folders } = result.data;
-
+      if (!images && !folders) return;
       this.setState(
         state => {
           let { folder } = { ...state };
@@ -177,14 +178,15 @@ class Widget extends Component {
 
       localStorage.setItem('gallery.widget.cache', JSON.stringify(result.data));
     };
-    this.Datastore.get(loadData);
-    this.Datastore.onUpdate(loadData);
+    // this.Datastore.get(loadData);
+    datastore.get('content.1', loadData);
+    datastore.onUpdate(loadData, false);
 
     const cache = localStorage.getItem('gallery.widget.cache');
     if (cache) {
       loadData(null, { data: JSON.parse(cache) });
     }
-    History.listen(location => {
+    this.History.listen(location => {
       const { pathname } = location;
       this.setState(() => ({ pathname }));
     });
@@ -209,7 +211,7 @@ class Widget extends Component {
       const { pswpOpen } = this.state;
       if (pswpOpen) {
         this.gallery.close();
-      } else if (History.location.pathname === '/') {
+      } else if (this.History.location.pathname === '/') {
         goBack();
       } else {
         history.pop();
@@ -217,7 +219,7 @@ class Widget extends Component {
     };
 
     history.onPop(b => {
-      History.replace(b.options.elementToShow || '/');
+      this.History.replace(b.options.elementToShow || '/');
     }, false);
 
     if (window.location.href.indexOf('localhost') > -1) {
@@ -234,7 +236,7 @@ class Widget extends Component {
     }
   };
 
-  componentDidUpdate = () => console.warn(this.state, History.location);
+  componentDidUpdate = () => console.warn(this.state, this.History.location);
 
   render() {
     const { images, folders, folder, view, pathname } = this.state;
@@ -248,7 +250,7 @@ class Widget extends Component {
           folder={folder}
           bookmark={this.bookmark}
         />
-        <Router history={History}>
+        <Router history={this.History}>
           <Route
             exact
             path="/"
@@ -276,11 +278,10 @@ class Widget extends Component {
           <Route
             exact
             path="/folder"
-            render={() => <Folder folder={folder} viewImage={this.viewImage} />}
+            render={() => <ViewFolder folder={folder} viewImage={this.viewImage} />}
           />
         </Router>
-        {/* {showImageModal && <ImageViewer index={index} images={images} />} */}
-        <ImageViewer shareImage={this.shareImage} />
+        <PswpGallery shareImage={this.shareImage} />
       </>
     );
   }

@@ -1,7 +1,7 @@
 import React from 'react';
-import Image from '../components';
+import { Image } from '../components';
 
-const Folder = ({ folder, viewImage }) => (
+const ViewFolder = ({ folder, viewImage }) => (
   <div className={`plugin__container ${!folder.id ? 'nopadding' : ''}`}>
     <div className="folder__details">
       <h2 className="folder__title">{folder.name}</h2>
@@ -21,4 +21,4 @@ const Folder = ({ folder, viewImage }) => (
   </div>
 );
 
-export default Folder;
+export default ViewFolder;

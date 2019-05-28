@@ -1,6 +1,5 @@
 import React from 'react';
-import ImageList from './ImageList';
-import FolderList from './FolderList';
+import { ImageList, FolderList } from '.';
 
 const Home = ({
   images,

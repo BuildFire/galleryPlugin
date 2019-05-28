@@ -25,15 +25,19 @@ export default class Image extends PureComponent {
   };
 
   render() {
-    const { src, selected } = this.props;
+    const { src, selected, removeImage } = this.props;
     const placeholderSrc = `https://czi3m2qn.cloudimg.io/crop/100x100/q10/${src}`;
     const finalSrc = `https://czi3m2qn.cloudimg.io/crop/500x500/q100/${src}`;
 
     return (
-      <div className={`image ${selected ? 'selected' : ''}`}>
+      <div className={`image ${selected ? 'selected' : ''}`} onClick={this.handleClick}>
         <img ref={this.placeholder} src={placeholderSrc} alt="placeholder" />
         <img ref={this.final} src={finalSrc} className="hidden" alt="placeholder" />
-        <span className="btn btn--icon icon icon-cross2" onClick={this.handleRemove}>X</span>
+        {removeImage && (
+          <span className="btn btn--icon icon icon-cross2" onClick={this.handleRemove}>
+            X
+          </span>
+        )}
       </div>
     );
   }
