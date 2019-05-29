@@ -12,7 +12,7 @@ export default class Datastore {
       if (callback) callback(null, result);
     };
 
-    datastore.get(Datastore.tag, onSuccess);
+    datastore.get(this.tag, onSuccess);
   };
 
   save = (object, callback) => {
@@ -20,8 +20,7 @@ export default class Datastore {
       if (err) callback(err, null);
       if (callback) callback(null, result);
     };
-
-    datastore.save(object, Datastore.tag, onSuccess);
+    datastore.save(object, this.tag, onSuccess);
   };
 
   saveWithDelay = (object, callback) => {

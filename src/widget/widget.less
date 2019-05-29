@@ -194,19 +194,31 @@ input[type='text'] {
 }
 .img__holder {
   overflow: hidden;
+  position: relative;
   cursor: pointer;
+
+  & img {
+    position: absolute;
+  }
 }
 .img__holder img {
   height: 100%;
   width: 100%;
   object-fit: cover;
 }
+/* Grid 0 */
+.grid--img.grid--0 {
+  grid-template-columns: repeat(auto-fill, minmax(calc(20vw - 0.125rem), 1fr));
+}
+.grid--img.grid--0 .img__holder {
+  height: calc(20vw - 0.125rem);
+}
 /* Grid 1 */
 .grid--img.grid--1 {
-  grid-template-columns: repeat(auto-fill, minmax(calc(33.33vw - 0.125rem), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(calc(25vw - 0.125rem), 1fr));
 }
 .grid--img.grid--1 .img__holder {
-  height: calc(33.33vw - 0.125rem);
+  height: calc(25vw - 0.125rem);
 }
 /* Grid 2 */
 .grid--img.grid--2 {
@@ -221,6 +233,13 @@ input[type='text'] {
 }
 .grid--img.grid--3 .img__holder {
   height: calc(50vw - 0.125rem);
+}
+/* Grid  */
+.grid--img.grid--4 {
+  grid-template-columns: repeat(auto-fill, minmax(calc(100vw - 0.125rem), 1fr));
+}
+.grid--img.grid--4 .img__holder {
+  height: calc(100vw - 0.125rem);
 }
 
 /* Grid Folder */

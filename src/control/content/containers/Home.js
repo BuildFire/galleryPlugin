@@ -13,6 +13,7 @@ const Home = ({
 }) => (
   <>
     <ImageList
+      type="gallery"
       images={images}
       removeImage={removeImage}
       showImageDialog={showImageDialog}
@@ -23,7 +24,7 @@ const Home = ({
       addFolder={addFolder}
       removeFolder={removeFolder}
       openFolder={openFolder}
-      // handleReorder={handleReorder}
+      handleReorder={handleReorder}
     />
   </>
 );

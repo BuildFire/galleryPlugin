@@ -14,12 +14,12 @@ class EditFolder extends Component {
   toggleImagesModal = () => this.setState(({ showModal }) => ({ showModal: !showModal }));
 
   handleAddImages = () => {
-    const { addImages } = this.props;
+    const { addImagesToFolder } = this.props;
     this.setState(state => {
       let { galleryImages } = { ...state };
       const selectImages = galleryImages.filter(image => image.selected);
 
-      addImages(selectImages);
+      addImagesToFolder(selectImages);
 
       galleryImages = galleryImages.map(img => {
         img.selected = false;
@@ -33,7 +33,6 @@ class EditFolder extends Component {
   selectImage = src => {
     this.setState(state => {
       const { galleryImages } = { ...state };
-      debugger
       const index = galleryImages.findIndex(image => image.src === src);
       galleryImages[index].selected = !galleryImages[index].selected;
 
@@ -44,8 +43,8 @@ class EditFolder extends Component {
   render() {
     const {
       folder,
-      removeImageFromFolder,
-      handleFolderReorder,
+      removeImage,
+      handleReorder,
       goHome,
       handleInputChange
     } = this.props;
@@ -69,24 +68,27 @@ class EditFolder extends Component {
         </div>
 
         <ImageList
+          type="folder"
           images={images}
           showImageDialog={this.toggleImagesModal}
-          removeImage={removeImageFromFolder}
-          handleReorder={handleFolderReorder}
+          removeImage={removeImage}
+          handleReorder={handleReorder}
         />
 
         <Modal show={showModal} toggle={this.toggleImagesModal}>
           <div className="carousel-items grid">
-            {galleryImages.map(({ src, selected }) => {
+            {galleryImages.map(({ id, src, selected }) => {
               if (!images.find(img => img.src === src)) {
-                return <Image key={src} src={src} selected={selected} onClick={this.selectImage} />;
+                return <Image key={id} src={src} selected={selected} onClick={this.selectImage} />;
               }
               return null;
             })}
           </div>
-          <button onClick={this.handleAddImages} type="button">
-            Add
-          </button>
+          <div className="modal__footer">
+            <button className="btn btn--add" onClick={this.handleAddImages} type="button">
+              Add
+            </button>
+          </div>
         </Modal>
       </>
     );

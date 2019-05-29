@@ -57,6 +57,66 @@ class Content extends Component {
     imageLib.showDialog(dialogOptions, onSubmit);
   };
 
+  addImagesToFolder = images => {
+    this.setState(
+      state => {
+        const { folder, folders } = { ...state };
+        folder.images = [...folder.images, ...images];
+
+        const index = folders.findIndex(({ id }) => id === folder.id);
+        folders[index] = folder;
+
+        return { folder, folders };
+      },
+      () => this.saveWithDelay()
+    );
+  };
+
+  removeImage = (src, type) => {
+    const removeImageFromGallery = () => {
+      this.setState(
+        state => {
+          let { images, folders } = { ...state };
+          images = images.filter(image => image.src !== src);
+          folders = folders.map(folder => {
+            folder.images = folder.images.filter(image => image.src !== src);
+            return folder;
+          });
+          return { images, folders };
+        },
+        () => this.saveWithDelay()
+      );
+    };
+
+    const removeImageFromFolder = () => {
+      this.setState(
+        state => {
+          const { folder, folders } = { ...state };
+          folder.images = folder.images.filter(image => image.src !== src);
+
+          const index = folders.findIndex(({ id }) => id === folder.id);
+          folders[index] = folder;
+
+          return { folder, folders };
+        },
+        () => this.saveWithDelay()
+      );
+    };
+
+    switch (type) {
+      case 'gallery': {
+        removeImageFromGallery();
+        break;
+      }
+      case 'folder': {
+        removeImageFromFolder();
+        break;
+      }
+      default:
+        break;
+    }
+  };
+
   addFolder = () => {
     const afterStateChange = () => {
       History.replace('/folder');
@@ -107,21 +167,6 @@ class Content extends Component {
     notifications.confirm(dialogOptions, dialogCallback);
   };
 
-  addImages = images => {
-    this.setState(
-      state => {
-        const { folder, folders } = { ...state };
-        folder.images = [...folder.images, ...images];
-
-        const index = folders.findIndex(({ id }) => id === folder.id);
-        folders[index] = folder;
-
-        return { folder, folders };
-      },
-      () => this.saveWithDelay()
-    );
-  };
-
   openFolder = folder => {
     const afterStateChange = () => {
       History.replace('/folder');
@@ -134,45 +179,53 @@ class Content extends Component {
     this.setState(() => ({ folder }), () => afterStateChange());
   };
 
-  handleReorder = e => {
-    const { images } = { ...this.state };
+  handleReorder = (e, type) => {
     const { oldIndex, newIndex } = e;
 
-    images.splice(newIndex, 0, images.splice(oldIndex, 1)[0]);
+    const reorderGalleryImages = () => {
+      const { images } = { ...this.state };
+      images.splice(newIndex, 0, images.splice(oldIndex, 1)[0]);
+      this.setState(() => ({ images }), () => this.saveWithDelay());
+    };
 
-    this.setState(() => ({ images }), () => this.saveWithDelay());
-  };
+    const reorderFolderImages = () => {
+      this.setState(
+        state => {
+          const { folder, folders } = { ...state };
+          folder.images.splice(newIndex, 0, folder.images.splice(oldIndex, 1)[0]);
 
-  handleFolderReorder = e => {
-    const { oldIndex, newIndex } = e;
+          const index = folders.findIndex(({ id }) => id === folder.id);
+          folders[index] = folder;
 
-    this.setState(
-      state => {
-        const { folder, folders } = { ...state };
-        folder.images.splice(newIndex, 0, folder.images.splice(oldIndex, 1)[0]);
+          return { folder, folders };
+        },
+        () => this.saveWithDelay()
+      );
+    };
 
-        const index = folders.findIndex(({ id }) => id === folder.id);
-        folders[index] = folder;
+    const reorderFolders = () => {
+      const { folders } = { ...this.state };
+      folders.splice(newIndex, 0, folders.splice(oldIndex, 1)[0]);
+      this.setState(() => ({ folders }), () => this.saveWithDelay());
+    };
 
-        return { folder, folders };
-      },
-      () => this.saveWithDelay()
-    );
-  };
-
-  removeImage = src => {
-    this.setState(
-      state => {
-        let { images, folders } = { ...state };
-        images = images.filter(image => image.src !== src);
-        folders = folders.map(folder => {
-          folder.images = folder.images.filter(image => image.src !== src);
-          return folder;
-        });
-        return { images, folders };
-      },
-      () => this.saveWithDelay()
-    );
+    switch (type) {
+      case 'gallery': {
+        reorderGalleryImages();
+        break;
+      }
+      case 'folder': {
+        reorderFolderImages();
+        break;
+      }
+      case 'folders': {
+        reorderFolders();
+        break;
+      }
+      default: {
+        break;
+      }
+    }
   };
 
   removeImageFromFolder = src => {
@@ -219,7 +272,7 @@ class Content extends Component {
     );
   };
 
-  componentDidUpdate = () => console.warn(this.state);
+  // componentDidUpdate = () => console.warn(this.state);
 
   componentDidMount = () => {
     const loadData = (err, result) => {
@@ -234,7 +287,6 @@ class Content extends Component {
         this.setState(() => ({ images, folders }));
       }
     };
-    history.onPop(breadcrumb => console.warn(breadcrumb));
     const cache = localStorage.getItem('gallery.cache');
     if (cache) loadData({ data: JSON.parse(cache) });
     this.Datastore.get(loadData);
@@ -273,8 +325,9 @@ class Content extends Component {
               folder={folder}
               goHome={this.goHome}
               removeImageFromFolder={this.removeImageFromFolder}
-              handleFolderReorder={this.handleFolderReorder}
-              addImages={this.addImages}
+              removeImage={this.removeImage}
+              handleReorder={this.handleReorder}
+              addImagesToFolder={this.addImagesToFolder}
               handleInputChange={this.handleInputChange}
             />
           )}

@@ -13,8 +13,8 @@ export default class Image extends PureComponent {
   };
 
   handleRemove = () => {
-    const { removeImage, src } = this.props;
-    if (removeImage) removeImage(src);
+    const { removeImage, src, type } = this.props;
+    if (removeImage) removeImage(src, type);
   };
 
   componentDidMount = () => {

@@ -2,14 +2,19 @@ import React, { PureComponent } from 'react';
 import LazyLoad from 'react-lazy-load';
 import { Image } from '../components';
 
+
 class Gallery extends PureComponent {
   constructor(props) {
     super(props);
+    const { scale } = this.props;
+    this.gridRef = React.createRef();
     this.rem = window
       .getComputedStyle(document.body)
       .getPropertyValue('font-size')
       .replace('px', '');
-    this.width = window.innerWidth / 3 - 0.125 * this.rem;
+    this.state = {
+      width: (window.innerWidth / Math.abs(scale - 5)) - (0.125 * this.rem)
+    };
   }
 
   componentDidMount = () => {
@@ -17,24 +22,33 @@ class Gallery extends PureComponent {
     clearFolder();
   };
 
+  componentDidUpdate = () => {
+    const { scale } = this.props;
+    this.setState(() => {
+      const width = (window.innerWidth / Math.abs(scale - 5)) - (0.125 * this.rem);
+      return { width };
+    });
+  }
+
   render() {
-    const { viewImage, images } = this.props;
+    const { viewImage, images, scale } = this.props;
+    const { width } = this.state;
     return (
       <div className="plugin__container">
         <div className="empty__state" />
         <section className="grid__group">
-          <div className="grid grid--img grid--1">
+          <div className={`grid grid--img grid--${scale}`}>
             {images
               && images.map(image => {
-                const { src, height } = image;
-                const thumbnail = { src, height, width: window.innerWidth / 3 };
+                const { src } = image;
+                const thumbnail = { src, height: width, width };
                 return (
                   <LazyLoad
                     key={image.id}
-                    width={this.width}
-                    height={this.width}
+                    width={width}
+                    height={width}
                     debounce
-                    offsetVertical={window.innerHeight / 3}
+                    throttle={0}
                   >
                     <Image image={thumbnail} viewImage={viewImage} />
                   </LazyLoad>

@@ -14,7 +14,7 @@ const ViewFolder = ({ folder, viewImage }) => (
           && folder.images.map(image => {
             const { src } = image;
             const thumbnail = { src, width: window.innerWidth / 3 };
-            return <Image image={thumbnail} viewImage={viewImage} />;
+            return <Image key={image.id} image={thumbnail} viewImage={viewImage} />;
           })}
       </div>
     </section>

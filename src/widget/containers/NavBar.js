@@ -2,7 +2,7 @@ import React from 'react';
 import { Buttons, FolderActions } from '../components';
 
 const NavBar = ({ changeView, view, pathname, bookmark, folder }) => {
-  if (pathname === '/folder' && !folder.id) return <></>;
+  if (pathname === '/folder' && (!folder || !folder.id)) return <></>;
   return (
     <div
       className={`plugin__nav ${
