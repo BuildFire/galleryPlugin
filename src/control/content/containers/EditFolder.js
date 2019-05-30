@@ -82,10 +82,10 @@ class EditFolder extends Component {
             })}
           </div>
           <div className="modal__footer">
-            <button className="btn btn--primary" onClick={this.toggleImagesModal} type="button">
-              Done
+            <button className="btn btn--ghost" onClick={this.toggleImagesModal} type="button">
+              Close
             </button>
-            <button className="btn btn--add" onClick={this.handleAddImages} type="button">
+            <button className="btn btn--add btn--lg" onClick={this.handleAddImages} type="button">
               Add
             </button>
           </div>

@@ -35,7 +35,6 @@ export default class Image extends PureComponent {
         <img ref={this.final} src={finalSrc} className="hidden" alt="placeholder" />
         {removeImage && (
           <span className="btn btn--icon icon icon-cross2" onClick={this.handleRemove}>
-            X
           </span>
         )}
       </div>
