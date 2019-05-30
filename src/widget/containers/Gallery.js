@@ -6,15 +6,11 @@ import { Image } from '../components';
 class Gallery extends PureComponent {
   constructor(props) {
     super(props);
-    const { scale } = this.props;
-    this.gridRef = React.createRef();
     this.rem = window
       .getComputedStyle(document.body)
       .getPropertyValue('font-size')
       .replace('px', '');
-    this.state = {
-      width: (window.innerWidth / Math.abs(scale - 5)) - (0.125 * this.rem)
-    };
+    this.width = (window.innerWidth / 3) - (0.125 * this.rem);
   }
 
   componentDidMount = () => {
@@ -22,31 +18,22 @@ class Gallery extends PureComponent {
     clearFolder();
   };
 
-  componentDidUpdate = () => {
-    const { scale } = this.props;
-    this.setState(() => {
-      const width = (window.innerWidth / Math.abs(scale - 5)) - (0.125 * this.rem);
-      return { width };
-    });
-  }
-
   render() {
-    const { viewImage, images, scale } = this.props;
-    const { width } = this.state;
+    const { viewImage, images } = this.props;
     return (
       <div className="plugin__container">
         <div className="empty__state" />
         <section className="grid__group">
-          <div className={`grid grid--img grid--${scale}`}>
+          <div className="grid grid--img grid--2">
             {images
               && images.map(image => {
                 const { src } = image;
-                const thumbnail = { src, height: width, width };
+                const thumbnail = { src, height: this.width, width: this.width };
                 return (
                   <LazyLoad
                     key={image.id}
-                    width={width}
-                    height={width}
+                    width={this.width}
+                    height={this.width}
                     debounce
                     throttle={0}
                   >

@@ -5,7 +5,7 @@ import { Route, Router } from 'react-router-dom';
 import { Folder, Img, History, Datastore } from '../scripts';
 import { Home, EditFolder } from '.';
 
-const { imageLib, history, notifications, messaging } = window.buildfire;
+const { imageLib, notifications, messaging } = window.buildfire;
 
 class Content extends Component {
   constructor(props) {
@@ -257,7 +257,7 @@ class Content extends Component {
     this.Datastore.saveWithDelay(obj, err => {
       if (err) throw err;
     });
-    localStorage.setItem('gallery.cache', JSON.stringify(this.state));
+    // localStorage.setItem('gallery.cache', JSON.stringify(this.state));
   };
 
   handleInputChange = e => {
@@ -276,23 +276,24 @@ class Content extends Component {
 
   componentDidMount = () => {
     const loadData = (err, result) => {
-      if (err && err.data) {
-        result = err;
-        err = null;
-      } else if (err) {
-        throw err;
-      }
+      if (err) throw err;
       const { images, folders } = result.data;
       if (images && folders) {
         this.setState(() => ({ images, folders }));
+        // localStorage.setItem(`${instanceId}.content.gallery_cache`, JSON.stringify(result.data));
       }
     };
-    const cache = localStorage.getItem('gallery.cache');
-    if (cache) loadData({ data: JSON.parse(cache) });
-    this.Datastore.get(loadData);
-    this.Datastore.onUpdate(loadData);
 
-    // this.Datastore.saveWithDelay({ images: [], folders: [] }, () => { });
+    // getContext((err, context) => {
+    // if (err) throw err;
+    // const { instanceId } = context;
+    this.Datastore.get((error, result) => loadData(error, result));
+    // this.Datastore.onUpdate(result => {
+    //   loadData(null, result);
+    // }, false);
+    // const cache = localStorage.getItem(`${instanceId}.gallery_cache`);
+    // if (cache) loadData(null, { data: JSON.parse(cache) });
+    // });
   };
 
   render() {

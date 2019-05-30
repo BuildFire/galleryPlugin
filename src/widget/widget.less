@@ -24,6 +24,12 @@ h6 {
   margin-bottom: 0.5em;
   font-weight: bold;
 }
+h1, .h1, h2, .h2, h3, .h3 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-weight: 300;
+  line-height: 1.1;
+}
 h4 {
   font-size: 0.875rem;
 }
@@ -197,7 +203,7 @@ input[type='text'] {
   position: relative;
   cursor: pointer;
 
-  & img {
+  & img, div {
     position: absolute;
   }
 }
@@ -425,11 +431,11 @@ input[type='text'] {
   pointer-events: none;
 }
 
-.LazyLoad {
-  // width: unset !important;
-  // height: unset !important;
-}
-
 .modal {
   background: rgba(0, 0, 0, 0.8) !important;
+}
+
+.placeholder {
+  width: 100%;
+  height: 100%;
 }

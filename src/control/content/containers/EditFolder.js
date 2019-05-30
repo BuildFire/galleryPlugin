@@ -41,24 +41,14 @@ class EditFolder extends Component {
   };
 
   render() {
-    const {
-      folder,
-      removeImage,
-      handleReorder,
-      goHome,
-      handleInputChange
-    } = this.props;
+    const { folder, removeImage, handleReorder, goHome, handleInputChange } = this.props;
     const { showModal, galleryImages } = this.state;
     const { images, name } = folder;
 
     return (
       <>
         <h1 className="title">Edit Folder</h1>
-        <button
-          className="btn btn--icon btn--close"
-          onClick={goHome}
-          type="button"
-        >
+        <button className="btn btn--icon btn--close" onClick={goHome} type="button">
           <span className="icon icon-cross2" />
         </button>
 
@@ -75,6 +65,13 @@ class EditFolder extends Component {
           handleReorder={handleReorder}
         />
 
+        {!images || !images.length ? (
+          <p className="info__note margin-top-twenty">
+            Note: Folders require at least one image, otherwise the folder will not be displayed to
+            users.
+          </p>
+        ) : null}
+
         <Modal show={showModal} toggle={this.toggleImagesModal}>
           <div className="carousel-items grid">
             {galleryImages.map(({ id, src, selected }) => {
@@ -85,6 +82,9 @@ class EditFolder extends Component {
             })}
           </div>
           <div className="modal__footer">
+            <button className="btn btn--primary" onClick={this.toggleImagesModal} type="button">
+              Done
+            </button>
             <button className="btn btn--add" onClick={this.handleAddImages} type="button">
               Add
             </button>

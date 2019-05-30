@@ -7,7 +7,7 @@ const Buttons = ({ view, changeView }) => (
       onClick={() => changeView('gallery')}
       type="button"
     >
-      <span className={`icon icon-picture2 ${view === 'gallery' ? 'titleBarTextAndIcons' : ''}`} />
+      <span className={`icon icon-picture2 ${view === 'gallery' ? 'whiteTheme' : ''}`} />
     </button>
     <button
       className={`btn btn--icon ${view === 'folders' ? 'btn-primary' : ''}`}
@@ -15,7 +15,7 @@ const Buttons = ({ view, changeView }) => (
       type="button"
     >
       <span
-        className={`icon icon-folder-picture ${view === 'folders' ? 'titleBarTextAndIcons' : ''}`}
+        className={`icon icon-folder-picture ${view === 'folders' ? 'whiteTheme' : ''}`}
       />
     </button>
   </nav>

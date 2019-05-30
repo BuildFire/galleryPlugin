@@ -2,7 +2,7 @@ const { datastore } = window.buildfire;
 
 export default class Datastore {
   constructor() {
-    this.tag = 'content.1';
+    this.tag = 'gallery';
     this.timeout = null;
   }
 

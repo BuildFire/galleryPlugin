@@ -2,14 +2,11 @@ import React, { Component } from 'react';
 import { hot } from 'react-hot-loader/root';
 import { Route, Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
-import { Context } from '../scripts/context';
 
 import PhotoSwipe from '../assets/photoswipe.min.js';
 import photoSwipeUIdefault from '../assets/photoswipe-ui-default.min.js';
 
 import { ViewFolder, Folders, Gallery, NavBar, PswpGallery } from '.';
-
-require('../scripts/hammer.min.js');
 
 const {
   datastore,
@@ -25,11 +22,8 @@ const {
 } = window.buildfire;
 
 class Widget extends Component {
-  static contextType = Context;
-
   constructor(props) {
     super(props);
-    this.hammerRef = React.createRef();
     this.History = createMemoryHistory();
     this.gallery = null;
     this.state = {
@@ -40,8 +34,7 @@ class Widget extends Component {
       view: 'gallery',
       showImageModal: false,
       index: 0,
-      pswpOpen: false,
-      scale: 1
+      pswpOpen: false
     };
   }
 
@@ -72,16 +65,15 @@ class Widget extends Component {
       spacing: 0,
       preload: [1, 1]
     };
-    // const h = window.innerHeight;
-    // const w = window.innerWidth;
+
     const galleryItems = (folderImages || images).map(img => ({
       w: img.width,
       h: img.height,
       msrc: `https://czi3m2qn.cloudimg.io/crop/${Math.floor(img.width / 2)}x${Math.floor(
         img.height / 2
-      )}/q10.fgaussian4/${img.src}`,
+      )}/q20.fgaussian4/${img.src}`,
       src: `https://czi3m2qn.cloudimg.io/crop/${img.width * window.devicePixelRatio}x${img.height
-        * window.devicePixelRatio}/q150/${img.src}`,
+        * window.devicePixelRatio}/q100/${img.src}`,
       sourceImg: img.src
     }));
     this.gallery = new PhotoSwipe(pswpEle, photoSwipeUIdefault, galleryItems, options);
@@ -160,14 +152,6 @@ class Widget extends Component {
   clearFolder = () => this.setState(() => ({ folder: null }));
 
   componentDidMount = () => {
-    // const foo = setInterval(() => {
-    //   this.setState(state => {
-    //     let { scale } = { ...state };
-    //     if (scale < 4) scale += 1;
-    //     else clearInterval(foo);
-    //     return { scale };
-    //   });
-    // }, 4000);
     const loadData = (err, result, instanceId) => {
       if (err) throw err;
       const { images, folders } = result.data;
@@ -192,7 +176,7 @@ class Widget extends Component {
       if (err) throw err;
       const { instanceId } = context;
 
-      datastore.get('content.1', (error, result) => {
+      datastore.get('gallery', (error, result) => {
         loadData(error, result, instanceId);
       });
       datastore.onUpdate(result => {
@@ -241,46 +225,9 @@ class Widget extends Component {
       this.History.replace(b.options.elementToShow || '/');
     }, false);
 
-    const hammer = new Hammer.Manager(this.hammerRef.current, {
-      touchAction: 'pan-y'
-    });
-    
-    const pinch = new Hammer.Pinch();
-    hammer.add([pinch]);
-    let timeout = null;
-    const handlePinch = e => {
-      if (timeout) return;
-      timeout = setTimeout(() => {
-        const { additionalEvent } = e;
-        this.setState(state => {
-          let { scale } = { ...state };
-          console.warn(e);
-
-          switch (additionalEvent) {
-            case 'pinchout': {
-              if (scale < 4) scale += 1;
-              break;
-            }
-            case 'pinchin': {
-              if (scale > 0) scale -= 1;
-              break;
-            }
-            default:
-              break;
-          }
-          console.warn(scale);
-
-          return { scale };
-        });
-        timeout = null;
-      }, 100);
-    };
-    hammer.on('pinch', handlePinch);
-
     if (window.location.href.indexOf('localhost') > -1) {
       getContext((err, context) => {
         if (err) throw err;
-        // remove in prod!
         // eslint-disable-next-line max-len
         appearance.attachAppThemeCSSFiles(
           context.appId,
@@ -294,10 +241,10 @@ class Widget extends Component {
   // componentDidUpdate = () => console.warn(this.state);
 
   render() {
-    const { images, folders, folder, view, pathname, scale } = this.state;
+    const { images, folders, folder, view, pathname } = this.state;
 
     return (
-      <div ref={this.hammerRef}>
+      <div>
         <NavBar
           view={view}
           pathname={pathname}
@@ -315,7 +262,6 @@ class Widget extends Component {
                   <Gallery
                     images={images}
                     view={view}
-                    scale={scale}
                     viewImage={this.viewImage}
                     clearFolder={this.clearFolder}
                   />

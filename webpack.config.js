@@ -113,7 +113,7 @@ if (!DEV) {
     minimizer: [
       new UglifyWebpackPlugin({
         uglifyOptions: {
-          mangle: false,
+          mangle: true,
           comments: false
         }
       })
