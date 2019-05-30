@@ -16,9 +16,9 @@ const ImageList = ({ type, images, showImageDialog, removeImage, handleReorder }
       <SortableList group="grid" handleReorder={onReorder}>
         {images
           && images.map(({ id, src }) => (
-            <LazyLoad key={id}>
-              <Image src={src} removeImage={removeImage} type={type} />
-            </LazyLoad>
+            // <LazyLoad key={id}>
+            <Image key={id} src={src} removeImage={removeImage} type={type} />
+            // </LazyLoad>
           ))}
       </SortableList>
     </section>
