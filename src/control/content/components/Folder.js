@@ -4,7 +4,9 @@ import { Image } from '.';
 const Folder = ({ folder, openFolder, removeFolder }) => {
   const handleClick = () => openFolder(folder);
   const handleRemoveFolder = e => removeFolder(e, folder);
-  const thumbnailSrc = folder.images && folder.images.length ? folder.images[folder.images.length - 1].src : null;
+  const thumbnailSrc = folder.images && folder.images.length
+    ? folder.images[folder.images.length - 1].src
+    : null;
 
   return (
     <div className="folder d-item" onClick={handleClick} onKeyDown={handleClick} role="button">
