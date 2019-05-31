@@ -1,7 +1,5 @@
 import React, { PureComponent } from 'react';
-import LazyLoad from 'react-lazy-load';
 import { Image } from '../components';
-
 
 class Gallery extends PureComponent {
   constructor(props) {
@@ -10,7 +8,7 @@ class Gallery extends PureComponent {
       .getComputedStyle(document.body)
       .getPropertyValue('font-size')
       .replace('px', '');
-    this.width = (window.innerWidth / 3) - (0.125 * this.rem);
+    this.width = window.innerWidth / 3 - 0.125 * this.rem;
   }
 
   componentDidMount = () => {
@@ -21,28 +19,20 @@ class Gallery extends PureComponent {
   render() {
     const { viewImage, images } = this.props;
     return (
-      <div className="plugin__container">
-        <div className="empty__state" />
-        <section className="grid__group">
-          <div className="grid grid--img grid--2">
-            {images
-              && images.map(image => {
-                const { src } = image;
-                const thumbnail = { src, height: this.width, width: this.width };
-                return (
-                  <LazyLoad
-                    key={image.id}
-                    width={this.width}
-                    height={this.width}
-                    debounce
-                    throttle={0}
-                  >
-                    <Image image={thumbnail} viewImage={viewImage} />
-                  </LazyLoad>
-                );
-              })}
-          </div>
-        </section>
+      <div className="observerFrame">
+        <div className="plugin__container">
+          <div className="empty__state" />
+          <section className="grid__group">
+            <div className="grid grid--img grid--2">
+              {images
+                && images.map(image => {
+                  const { src } = image;
+                  const thumbnail = { src, height: this.width, width: this.width };
+                  return <Image image={thumbnail} viewImage={viewImage} />;
+                })}
+            </div>
+          </section>
+        </div>
       </div>
     );
   }

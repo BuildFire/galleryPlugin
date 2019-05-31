@@ -81,7 +81,10 @@ class Widget extends Component {
 
     this.setState(() => ({ pswpOpen: true }));
 
-    this.gallery.listen('close', () => this.setState(() => ({ pswpOpen: false })));
+    this.gallery.listen('close', () => {
+      spinner.hide();
+      this.setState(() => ({ pswpOpen: false }));
+    });
     this.gallery.listen('imageLoadComplete', () => spinner.hide());
   };
 
