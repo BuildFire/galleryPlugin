@@ -30,15 +30,7 @@ class Gallery extends PureComponent {
                 const { src } = image;
                 const thumbnail = { src, height: this.width, width: this.width };
                 return (
-                  <LazyLoad
-                    key={image.id}
-                    width={this.width}
-                    height={this.width}
-                    debounce
-                    throttle={0}
-                  >
-                    <Image image={thumbnail} viewImage={viewImage} />
-                  </LazyLoad>
+                  <Image image={thumbnail} viewImage={viewImage} />
                 );
               })}
           </div>

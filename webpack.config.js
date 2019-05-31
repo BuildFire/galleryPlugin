@@ -48,7 +48,7 @@ const WebpackConfig = {
 };
 
 // Development only settings
-if (DEV) {
+if (true) {
   WebpackConfig.devtool = 'eval-source-map';
   WebpackConfig.output.publicPath = '/';
   WebpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
@@ -92,7 +92,7 @@ if (DEV) {
 }
 
 // Production only settings
-if (!DEV) {
+if (!true) {
   WebpackConfig.output.filename = '[name].[chunkhash].js';
   WebpackConfig.stats = 'normal';
 
