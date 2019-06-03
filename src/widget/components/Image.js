@@ -56,7 +56,7 @@ export default class Image extends PureComponent {
     const { src, width } = image;
 
     // const loadingSrc = `https://czi3m2qn.cloudimg.io/crop/${Math.floor(width / 3)}x${Math.floor(width / 3)}/q10.fgaussian6.i1/${src}`;
-    const finalSrc = `https://czi3m2qn.cloudimg.io/crop/${Math.floor(width * window.devicePixelRatio)}x${Math.floor(width * window.devicePixelRatio)}/q50.i1/${src}`;
+    const finalSrc = `https://czi3m2qn.cloudimg.io/crop/${Math.floor(width * window.devicePixelRatio)}x${Math.floor(width * window.devicePixelRatio)}/${window.devicePixelRatio > 1 ? 'q35' : 'q60'}.i1/${src}`;
 
     return (
       <div ref={this.observerRef} className="img__holder" onClick={this.openImage}>
