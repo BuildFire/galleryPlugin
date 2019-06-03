@@ -52,34 +52,30 @@ export default class Image extends PureComponent {
 
   render() {
     const { image } = this.props;
-    const { loadingImgComplete, placeholderColor } = this.state;
+    const { loadingImgComplete, finalImgComplete, placeholderColor } = this.state;
     const { src, width } = image;
 
-    const loadingSrc = `https://czi3m2qn.cloudimg.io/crop/${Math.floor(width / 2)}x${Math.floor(
-      width / 2
-    )}/q20.fgaussian1/${src}`;
-    const finalSrc = `https://czi3m2qn.cloudimg.io/crop/${Math.floor(
-      width * window.devicePixelRatio
-    )}x${Math.floor(width * window.devicePixelRatio)}/q100/${src}`;
+    // const loadingSrc = `https://czi3m2qn.cloudimg.io/crop/${Math.floor(width / 3)}x${Math.floor(width / 3)}/q10.fgaussian6.i1/${src}`;
+    const finalSrc = `https://czi3m2qn.cloudimg.io/crop/${Math.floor(width * window.devicePixelRatio)}x${Math.floor(width * window.devicePixelRatio)}/q50.i1/${src}`;
 
     return (
       <div ref={this.observerRef} className="img__holder" onClick={this.openImage}>
-        <div className="placeholder" style={{ background: placeholderColor }} />
+        {!finalImgComplete && <div className="placeholder" style={{ background: placeholderColor }} />}
         <LazyLoad height={width} overflow offset={window.innerHeight} throttle={0}>
-          <img
+          {/* <img
             ref={this.loading}
             src={loadingSrc}
             alt="placeholder"
             onLoad={this.handleLoadingImgComplete}
+          /> */}
+          {/* {loadingImgComplete && ( */}
+          <img
+            ref={this.final}
+            src={finalSrc}
+            alt="placeholder"
+            onLoad={this.handleFinalImgComplete}
           />
-          {loadingImgComplete && (
-            <img
-              ref={this.final}
-              src={finalSrc}
-              alt="placeholder"
-              onLoad={this.handleFinalImgComplete}
-            />
-          )}
+          {/* )} */}
         </LazyLoad>
       </div>
     );
