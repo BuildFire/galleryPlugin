@@ -21,13 +21,13 @@ export default class Image extends PureComponent {
     viewImage(image.src);
   };
 
-  handleLoadingImgComplete = () => {
-    this.setState(() => ({ loadingImgComplete: true }));
-  };
+  // handleLoadingImgComplete = () => {
+  //   this.setState(() => ({ loadingImgComplete: true }));
+  // };
 
-  handleFinalImgComplete = () => {
-    this.setState(() => ({ finalImgComplete: true }));
-  };
+  // handleFinalImgComplete = () => {
+  //   this.setState(() => ({ finalImgComplete: true }));
+  // };
 
   getPlaceholderColor = () => {
     const min = 100;
@@ -35,7 +35,7 @@ export default class Image extends PureComponent {
 
     const getColor = () => Math.floor(Math.random() * (max - min) + min);
 
-    return `rgb(${getColor()},${getColor()},${getColor()})`;
+    return `rgba(${getColor()}, ${getColor()}, ${getColor()}, .25)`;
   };
 
   componentWillUnmount = () => {
@@ -60,7 +60,6 @@ export default class Image extends PureComponent {
 
     return (
       <div ref={this.observerRef} className="img__holder" onClick={this.openImage}>
-        {!finalImgComplete && <div className="placeholder" style={{ background: placeholderColor }} />}
         <LazyLoad height={width} overflow offset={window.innerHeight} throttle={0}>
           {/* <img
             ref={this.loading}
@@ -77,6 +76,7 @@ export default class Image extends PureComponent {
           />
           {/* )} */}
         </LazyLoad>
+        <div className="placeholder" style={{ background: placeholderColor }} />
       </div>
     );
   }

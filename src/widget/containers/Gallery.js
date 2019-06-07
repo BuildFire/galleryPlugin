@@ -19,20 +19,18 @@ class Gallery extends PureComponent {
   render() {
     const { viewImage, images } = this.props;
     return (
-      <div className="observerFrame">
-        <div className="plugin__container">
-          <div className="empty__state" />
-          <section className="grid__group">
-            <div className="grid grid--img grid--2">
-              {images
-                && images.map(image => {
-                  const { src } = image;
-                  const thumbnail = { src, height: this.width, width: this.width };
-                  return <Image image={thumbnail} viewImage={viewImage} />;
-                })}
-            </div>
-          </section>
-        </div>
+      <div className="plugin__container">
+        <div className="empty__state" />
+        <section className="grid__group">
+          <div className="grid grid--img grid--2">
+            {images
+              && images.map(image => {
+                const { src } = image;
+                const thumbnail = { src, height: this.width, width: this.width };
+                return <Image image={thumbnail} viewImage={viewImage} />;
+              })}
+          </div>
+        </section>
       </div>
     );
   }
