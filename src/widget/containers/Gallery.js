@@ -25,9 +25,9 @@ class Gallery extends PureComponent {
           <div className="grid grid--img grid--2">
             {images
               && images.map(image => {
-                const { src } = image;
+                const { src, id } = image;
                 const thumbnail = { src, height: this.width, width: this.width };
-                return <Image image={thumbnail} viewImage={viewImage} />;
+                return <Image key={id} image={thumbnail} viewImage={viewImage} />;
               })}
           </div>
         </section>

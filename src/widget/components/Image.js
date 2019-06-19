@@ -4,16 +4,10 @@ import LazyLoad from 'react-lazyload';
 export default class Image extends PureComponent {
   constructor(props) {
     super(props);
-    this.observer = null;
-    this.observerRef = React.createRef();
     this.placeholder = React.createRef();
     this.loading = React.createRef();
     this.final = React.createRef();
-    this.state = {
-      placeholderColor: '',
-      loadingImgComplete: false,
-      finalImgComplete: false
-    };
+    // this.state = { placeholderColor: '' };
   }
 
   openImage = () => {
@@ -21,21 +15,25 @@ export default class Image extends PureComponent {
     viewImage(image.src);
   };
 
-  // handleLoadingImgComplete = () => {
-  //   this.setState(() => ({ loadingImgComplete: true }));
+  // getPlaceholderColor = () => {
+  //   const min = 100;
+  //   const max = 200;
+
+  //   const getColor = () => Math.floor(Math.random() * (max - min) + min);
+
+  //   return `rgba(${getColor()}, ${getColor()}, ${getColor()}, .25)`;
   // };
 
-  // handleFinalImgComplete = () => {
-  //   this.setState(() => ({ finalImgComplete: true }));
-  // };
-
-  getPlaceholderColor = () => {
-    const min = 100;
-    const max = 200;
-
-    const getColor = () => Math.floor(Math.random() * (max - min) + min);
-
-    return `rgba(${getColor()}, ${getColor()}, ${getColor()}, .25)`;
+  optimizeImage = url => {
+    const size = url.match(/\/\d+\D\d+\//g);
+    if (!url.includes('cloudimg.io') || !size || /png-lossy-\d\d.q\d\d/g.test(url)) {
+      return url;
+    }
+    const compressionRatio = window.devicePixelRatio > 1 ? '40' : '65';
+    return url.replace(
+      /\/s\/crop\/\d+\D\d+\//g,
+      `/crop${size[0]}png-lossy-${compressionRatio}.q${compressionRatio}.i1/`
+    );
   };
 
   componentWillUnmount = () => {
@@ -43,40 +41,33 @@ export default class Image extends PureComponent {
     if (this.loading.current) this.loading.current.onload = () => {};
   };
 
-  componentDidMount = () => {
-    this.setState(() => {
-      const placeholderColor = this.getPlaceholderColor();
-      return { placeholderColor };
-    });
-  };
+  // componentDidMount = () => {
+  //   this.setState(() => {
+  //     const placeholderColor = this.getPlaceholderColor();
+  //     return { placeholderColor };
+  //   });
+  // };
 
   render() {
     const { image } = this.props;
-    const { loadingImgComplete, finalImgComplete, placeholderColor } = this.state;
+    // const { placeholderColor } = this.state;
     const { src, width } = image;
 
-    // const loadingSrc = `https://czi3m2qn.cloudimg.io/crop/${Math.floor(width / 3)}x${Math.floor(width / 3)}/q10.fgaussian6.i1/${src}`;
-    const finalSrc = `https://czi3m2qn.cloudimg.io/crop/${Math.floor(width * window.devicePixelRatio)}x${Math.floor(width * window.devicePixelRatio)}/${window.devicePixelRatio > 1 ? 'q35' : 'q60'}.i1/${src}`;
+    const croppedSrc = window.buildfire.imageLib.cropImage(src, { width, height: width });
+    const finalSrc = this.optimizeImage(croppedSrc);
 
     return (
       <div ref={this.observerRef} className="img__holder" onClick={this.openImage}>
         <LazyLoad height={width} overflow offset={window.innerHeight} throttle={0}>
-          {/* <img
-            ref={this.loading}
-            src={loadingSrc}
-            alt="placeholder"
-            onLoad={this.handleLoadingImgComplete}
-          /> */}
-          {/* {loadingImgComplete && ( */}
           <img
             ref={this.final}
             src={finalSrc}
             alt="placeholder"
             onLoad={this.handleFinalImgComplete}
           />
-          {/* )} */}
         </LazyLoad>
-        <div className="placeholder" style={{ background: placeholderColor }} />
+        {/* <div className="placeholder" style={{ background: placeholderColor }} /> */}
+        <img className="placeholder" src="../../../styles/media/holder-1x1.gif" alt="placeholder" />
       </div>
     );
   }

@@ -72,8 +72,7 @@ class Widget extends Component {
       msrc: `https://czi3m2qn.cloudimg.io/crop/${Math.floor(img.width / 2)}x${Math.floor(
         img.height / 2
       )}/q20.fgaussian4/${img.src}`,
-      src: `https://czi3m2qn.cloudimg.io/crop/${img.width * window.devicePixelRatio}x${img.height
-        * window.devicePixelRatio}/q100/${img.src}`,
+      src: `https://czi3m2qn.cloudimg.io/crop/${img.width}x${img.height}/q100/${img.src}`,
       sourceImg: img.src
     }));
     this.gallery = new PhotoSwipe(pswpEle, photoSwipeUIdefault, galleryItems, options);
