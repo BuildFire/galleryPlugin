@@ -26,8 +26,10 @@ export default class Image extends PureComponent {
 
   render() {
     const { src, selected, removeImage } = this.props;
-    const placeholderSrc = `https://czi3m2qn.cloudimg.io/crop/100x100/q10/${src}`;
-    const finalSrc = `https://czi3m2qn.cloudimg.io/crop/500x500/q100/${src}`;
+    const { imageLib } = window.buildfire;
+
+    const placeholderSrc = '../../../../../styles/media/holder-1x1.gif';
+    const finalSrc = imageLib.cropImage(src, { width: 100, height: 100 });
 
     return (
       <div className={`image ${selected ? 'selected' : ''}`} onClick={this.handleClick}>

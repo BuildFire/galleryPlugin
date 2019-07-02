@@ -10,7 +10,7 @@ const ImageList = ({ type, images, showImageDialog, removeImage, handleReorder }
   return (
     <section className="image__grid">
       <button onClick={showImageDialog} className="btn btn--add" type="button">
-        Add Images
+        {type === 'gallery' ? 'Add Images' : 'Select Images'}
       </button>
       <SortableList group="grid" handleReorder={onReorder}>
         {images
