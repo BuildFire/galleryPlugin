@@ -49,7 +49,8 @@ class EditFolder extends Component {
       <>
         <h1 className="title">Edit Folder</h1>
         <button className="btn btn--icon btn--close" onClick={goHome} type="button">
-          <span className="icon icon-cross2" />
+          <span className="icon icon-angle-left" />
+          <p>back</p>
         </button>
 
         <div className="input__group">

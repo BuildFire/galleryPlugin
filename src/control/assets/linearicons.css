@@ -78,3 +78,6 @@
 .icon-ellipsis:before {
   content: "\e620";
 }
+.icon-angle-left:before {
+  content: "\f104";
+}
