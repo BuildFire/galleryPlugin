@@ -24,11 +24,19 @@ class Content extends Component {
       if (err) throw err;
       const { selectedFiles } = result;
 
+      const optimizeImg = src => {
+        const croppedImg = imageLib.cropImage(src, { width: 1, height: 1 });
+        if (!croppedImg.includes('cloudimg.io')) {
+          return src;
+        }
+        return croppedImg.replace(/\/s\/crop\/\d+\D\d+\//g, '/cdno/n/q1/');
+      };
+
       const imagePromises = selectedFiles.map(
         src => new Promise(resolve => {
           const image = new Image();
           image.onload = () => resolve(image);
-          image.src = `https://czi3m2qn.cloudimg.io/cdn/n/n/${src}`;
+          image.src = optimizeImg(src);
           image.originalSrc = src;
         })
       );

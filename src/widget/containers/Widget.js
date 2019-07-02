@@ -18,7 +18,8 @@ const {
   device,
   spinner,
   bookmarks,
-  deeplink
+  deeplink,
+  imageLib
 } = window.buildfire;
 
 class Widget extends Component {
@@ -66,15 +67,29 @@ class Widget extends Component {
       preload: [1, 1]
     };
 
-    const galleryItems = (folderImages || images).map(img => ({
-      w: img.width,
-      h: img.height,
-      msrc: `https://czi3m2qn.cloudimg.io/crop/${Math.floor(img.width / 2)}x${Math.floor(
-        img.height / 2
-      )}/q20.fgaussian4/${img.src}`,
-      src: `https://czi3m2qn.cloudimg.io/crop/${img.width}x${img.height}/q100/${img.src}`,
-      sourceImg: img.src
-    }));
+    const optimizeImage = config => {
+      const { croppedSrc, width, height, compression } = config;
+      if (!croppedSrc.includes('cloudimg.io')) {
+        return croppedSrc;
+      }
+
+      return croppedSrc.replace(
+        /\/s\/crop\/\d+\D\d+\//g,
+        `/crop/${Math.floor(width)}x${Math.floor(height)}/${compression || 'n'}/`
+      );
+    };
+
+    const galleryItems = (folderImages || images).map(img => {
+      const croppedSrc = imageLib.cropImage(img.src, { width: img.width, height: img.height });
+      const { width, height } = img;
+      return {
+        w: img.width,
+        h: img.height,
+        msrc: optimizeImage({ croppedSrc, width: width / 2, height: height / 2, compression: 'q20.fgaussian4' }),
+        src: optimizeImage({ croppedSrc, width, height, compression: 'q100' }),
+        sourceImg: img.src
+      };
+    });
     this.gallery = new PhotoSwipe(pswpEle, photoSwipeUIdefault, galleryItems, options);
     this.gallery.init();
 
