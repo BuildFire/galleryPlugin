@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Image, Modal, Input } from '../components';
-import { ImageList } from '.';
+import { Input, Modal } from '../components';
+import { ImageList, ImagePicker } from '.';
 
 class EditFolder extends Component {
   constructor(props) {
@@ -35,10 +35,13 @@ class EditFolder extends Component {
       const { galleryImages } = { ...state };
       const index = galleryImages.findIndex(image => image.src === src);
       galleryImages[index].selected = !galleryImages[index].selected;
-
+      console.warn(galleryImages[index]);
+      
       return { galleryImages };
     });
   };
+
+  componentDidUpdate = () => console.warn(this.state)
 
   render() {
     const { folder, removeImage, handleReorder, goHome, handleInputChange } = this.props;
@@ -59,6 +62,7 @@ class EditFolder extends Component {
 
         <ImageList
           type="folder"
+          fid="folder"
           images={images}
           showImageDialog={this.toggleImagesModal}
           removeImage={removeImage}
@@ -73,22 +77,14 @@ class EditFolder extends Component {
         ) : null}
 
         <Modal show={showModal} toggle={this.toggleImagesModal}>
-          <div className="carousel-items grid">
-            {galleryImages.map(({ id, src, selected }) => {
-              if (!images.find(img => img.src === src)) {
-                return <Image key={id} src={src} selected={selected} onClick={this.selectImage} />;
-              }
-              return null;
-            })}
-          </div>
-          <div className="modal__footer">
-            <button className="btn btn--ghost" onClick={this.toggleImagesModal} type="button">
-              Close
-            </button>
-            <button className="btn btn--add btn--lg" onClick={this.handleAddImages} type="button">
-              Add
-            </button>
-          </div>
+          <ImagePicker
+            images={images}
+            galleryImages={galleryImages}
+            selectImage={this.selectImage}
+            showModal={showModal}
+            toggleImagesModal={this.toggleImagesModal}
+            handleAddImages={this.handleAddImages}
+            />
         </Modal>
       </>
     );

@@ -14,6 +14,7 @@ const Home = ({
   <>
     <ImageList
       type="gallery"
+      fid="gallery-image-list"
       images={images}
       removeImage={removeImage}
       showImageDialog={showImageDialog}

@@ -24,8 +24,9 @@ h6 {
 }
 
 .title {
+  padding-top: 0px;
+  margin-top: 0px;
   font-size: 1.125rem;
-  padding-top: 0.875rem;
   margin-bottom: 0.875rem;
   color: #000;
   font-weight: bold;
@@ -199,7 +200,7 @@ input {
 section.image__grid {
   display: flex;
   align-items: flex-start;
-  margin: 2rem 0;
+  // margin: 2rem 0;
 }
 
 /* Drag and drop grid */
@@ -211,7 +212,8 @@ section.image__grid {
   flex: auto;
   margin: 0;
   margin-left: 2rem;
-  max-height: 480px;
+  max-height: 375px;
+  // min-height: 375px;
   overflow-y: scroll;
   padding: 0.25rem;
 
@@ -276,6 +278,17 @@ section.image__grid {
     transition: background-color ease-in-out 0.1s, color ease-in-out 0.1s;
     background-color: rgba(255, 255, 255, 0.8);
     color: red;
+  }
+}
+
+@media screen and (min-width: 560px) {
+  .carousel-items.grid {
+    max-height: 480px;
+    // min-height: 480px;
+  }
+  .title {
+    padding-top: 0.875rem;
+    margin-top: 20px;
   }
 }
 
@@ -463,6 +476,6 @@ p.info__note{
   line-height: 1.33;
   color: #808080;
   padding: 0.5rem 1rem;
-  margin-bottom: 1.5rem;
+  margin: 1.5rem 0;
   border-radius: 0.25rem;
 }

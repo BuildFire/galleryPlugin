@@ -85,7 +85,12 @@ class Widget extends Component {
       return {
         w: img.width,
         h: img.height,
-        msrc: optimizeImage({ croppedSrc, width: width / 2, height: height / 2, compression: 'q20.fgaussian4' }),
+        msrc: optimizeImage({
+          croppedSrc,
+          width: width / 2,
+          height: height / 2,
+          compression: 'q20.fgaussian4'
+        }),
         src: optimizeImage({ croppedSrc, width, height, compression: 'q100' }),
         sourceImg: img.src
       };
@@ -262,13 +267,15 @@ class Widget extends Component {
 
     return (
       <div>
-        <NavBar
-          view={view}
-          pathname={pathname}
-          changeView={this.changeView}
-          folder={folder}
-          bookmark={this.bookmark}
-        />
+        {folders && folders.length > 0 && (
+          <NavBar
+            view={view}
+            pathname={pathname}
+            changeView={this.changeView}
+            folder={folder}
+            bookmark={this.bookmark}
+          />
+        )}
         <Router history={this.History}>
           <Route
             exact
@@ -278,6 +285,7 @@ class Widget extends Component {
                 return (
                   <Gallery
                     images={images}
+                    folders={folders}
                     view={view}
                     viewImage={this.viewImage}
                     clearFolder={this.clearFolder}

@@ -5,7 +5,7 @@ const Modal = ({ show, children, toggle }) => (
     <div className="modal-dialog" role="document" onClick={e => e.stopPropagation()}>
       <div className="modal-content backgroundColorTheme">
         <div className="modal-body">
-          {children}
+          {show ? children : null}
         </div>
       </div>
     </div>

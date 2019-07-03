@@ -8,8 +8,9 @@ export default class SortableList extends Component {
   }
 
   componentDidMount = () => {
+    const { group, handleReorder, noSort } = this.props;
+    if (noSort) return;
     const element = this.sortableRef.current;
-    const { group, handleReorder } = this.props;
     this.sortable = new window.Sortable(element, {
       group,
       animation: 150,
@@ -20,9 +21,9 @@ export default class SortableList extends Component {
   };
 
   render() {
-    const { children, group } = this.props;
+    const { children, group, fid } = this.props;
     return (
-      <div ref={this.sortableRef} className={`carousel-items hide-empty draggable-list-view ${group}`}>
+      <div id={fid} ref={this.sortableRef} className={`carousel-items hide-empty draggable-list-view ${group}`}>
         {children}
       </div>
     );

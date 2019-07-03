@@ -219,20 +219,7 @@ input[type='text'] {
   z-index: 1;
   position: absolute;
 }
-/* Grid 0 */
-.grid--img.grid--0 {
-  grid-template-columns: repeat(auto-fill, minmax(calc(20vw - 0.125rem), 1fr));
-}
-.grid--img.grid--0 .img__holder {
-  height: calc(20vw - 0.125rem);
-}
-/* Grid 1 */
-.grid--img.grid--1 {
-  grid-template-columns: repeat(auto-fill, minmax(calc(25vw - 0.125rem), 1fr));
-}
-.grid--img.grid--1 .img__holder {
-  height: calc(25vw - 0.125rem);
-}
+
 /* Grid 2 */
 .grid--img.grid--2 {
   grid-template-columns: repeat(auto-fill, minmax(calc(33.333vw - 0.125rem), 1fr));
@@ -240,19 +227,51 @@ input[type='text'] {
 .grid--img.grid--2 .img__holder {
   height: calc(33.333vw - 0.125rem);
 }
-/* Grid 3 */
-.grid--img.grid--3 {
-  grid-template-columns: repeat(auto-fill, minmax(calc(50% - 0.125rem), 1fr));
+
+// Small phones
+@media screen and (max-width: 329px) {
+  .grid--img.grid--2 {
+    grid-template-columns: repeat(auto-fill, minmax(calc(50vw - 0.125rem), 1fr));
+  }
+  .grid--img.grid--2 .img__holder {
+    height: calc(50vw - 0.125rem);
+  }
 }
-.grid--img.grid--3 .img__holder {
-  height: calc(50vw - 0.125rem);
+// medium and large phones
+@media screen and (min-width: 330px) and (max-width: 612px) {
+  .grid--img.grid--2 {
+    grid-template-columns: repeat(auto-fill, minmax(calc(33.333vw - 0.125rem), 1fr));
+  }
+  .grid--img.grid--2 .img__holder {
+    height: calc(33.333vw - 0.125rem);
+  }
 }
-/* Grid  */
-.grid--img.grid--4 {
-  grid-template-columns: repeat(auto-fill, minmax(calc(100vw - 0.125rem), 1fr));
+// small tablets
+@media screen and (min-width: 612px) and (max-width: 787px) {
+  .grid--img.grid--2 {
+    grid-template-columns: repeat(auto-fill, minmax(calc(25vw - 0.125rem), 1fr));
+  }
+  .grid--img.grid--2 .img__holder {
+    height: calc(25vw - 0.125rem);
+  }
 }
-.grid--img.grid--4 .img__holder {
-  height: calc(100vw - 0.125rem);
+// medium tablets
+@media screen and (min-width: 788px) and (max-width: 962px) {
+  .grid--img.grid--2 {
+    grid-template-columns: repeat(auto-fill, minmax(calc(20vw - 0.125rem), 1fr));
+  }
+  .grid--img.grid--2 .img__holder {
+    height: calc(20vw - 0.125rem);
+  }
+}
+// large tablets and desktop
+@media screen and (min-width: 963px) {
+  .grid--img.grid--2 {
+    grid-template-columns: repeat(auto-fill, minmax(calc(16.666vw - 0.125rem), 1fr));
+  }
+  .grid--img.grid--2 .img__holder {
+    height: calc(16.666vw - 0.125rem);
+  }
 }
 
 /* Grid Folder */

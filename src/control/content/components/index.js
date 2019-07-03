@@ -1,6 +1,6 @@
 import SortableList from './SortableList';
 import Folder from './Folder';
-import Image from './Image';
+import Image from './LazyImg';
 import Modal from './Modal';
 import Input from './Input';
 
