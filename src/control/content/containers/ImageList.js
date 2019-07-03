@@ -35,6 +35,7 @@ class ImageList extends Component {
               && images.map(({ id, src }) => (
                 <Image
                   key={id}
+                  id={id}
                   src={src}
                   fid={fid}
                   removeImage={removeImage}

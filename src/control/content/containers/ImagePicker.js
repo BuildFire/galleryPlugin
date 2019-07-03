@@ -13,21 +13,16 @@ export default class ImagePicker extends Component {
   };
 
   render() {
-    const {
-      images,
-      galleryImages,
-      toggleImagesModal,
-      handleAddImages,
-      selectImage
-    } = this.props;
+    const { images, galleryImages, toggleImagesModal, handleAddImages, selectImage } = this.props;
     return (
       <div>
         <SortableList fid={this.fid} group="grid" noSort>
           {galleryImages.map(({ id, src, selected }) => {
-            if (!images.find(img => img.src === src)) {
+            if (!images.find(img => img.id === id)) {
               return (
                 <Image
                   key={id}
+                  id={id}
                   src={src}
                   fid={this.fid}
                   selected={selected}

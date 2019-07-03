@@ -30,18 +30,15 @@ class EditFolder extends Component {
     });
   };
 
-  selectImage = src => {
+  selectImage = id => {
     this.setState(state => {
       const { galleryImages } = { ...state };
-      const index = galleryImages.findIndex(image => image.src === src);
+      const index = galleryImages.findIndex(image => image.id === id);
       galleryImages[index].selected = !galleryImages[index].selected;
-      console.warn(galleryImages[index]);
-      
+
       return { galleryImages };
     });
   };
-
-  componentDidUpdate = () => console.warn(this.state)
 
   render() {
     const { folder, removeImage, handleReorder, goHome, handleInputChange } = this.props;
@@ -84,7 +81,7 @@ class EditFolder extends Component {
             showModal={showModal}
             toggleImagesModal={this.toggleImagesModal}
             handleAddImages={this.handleAddImages}
-            />
+          />
         </Modal>
       </>
     );

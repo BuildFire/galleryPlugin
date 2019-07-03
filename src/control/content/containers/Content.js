@@ -80,14 +80,14 @@ class Content extends Component {
     );
   };
 
-  removeImage = (src, type) => {
+  removeImage = (imgId, type) => {
     const removeImageFromGallery = () => {
       this.setState(
         state => {
           let { images, folders } = { ...state };
-          images = images.filter(image => image.src !== src);
+          images = images.filter(image => image.id !== imgId);
           folders = folders.map(folder => {
-            folder.images = folder.images.filter(image => image.src !== src);
+            folder.images = folder.images.filter(image => image.id !== imgId);
             return folder;
           });
           return { images, folders };
@@ -100,7 +100,7 @@ class Content extends Component {
       this.setState(
         state => {
           const { folder, folders } = { ...state };
-          folder.images = folder.images.filter(image => image.src !== src);
+          folder.images = folder.images.filter(image => image.id !== imgId);
 
           const index = folders.findIndex(({ id }) => id === folder.id);
           folders[index] = folder;
@@ -265,7 +265,6 @@ class Content extends Component {
     this.Datastore.saveWithDelay(obj, err => {
       if (err) throw err;
     });
-    // localStorage.setItem('gallery.cache', JSON.stringify(this.state));
   };
 
   handleInputChange = e => {
@@ -280,28 +279,16 @@ class Content extends Component {
     );
   };
 
-  // componentDidUpdate = () => console.warn(this.state);
-
   componentDidMount = () => {
     const loadData = (err, result) => {
       if (err) throw err;
       const { images, folders } = result.data;
       if (images && folders) {
         this.setState(() => ({ images, folders }));
-        // localStorage.setItem(`${instanceId}.content.gallery_cache`, JSON.stringify(result.data));
       }
     };
 
-    // getContext((err, context) => {
-    // if (err) throw err;
-    // const { instanceId } = context;
     this.Datastore.get((error, result) => loadData(error, result));
-    // this.Datastore.onUpdate(result => {
-    //   loadData(null, result);
-    // }, false);
-    // const cache = localStorage.getItem(`${instanceId}.gallery_cache`);
-    // if (cache) loadData(null, { data: JSON.parse(cache) });
-    // });
   };
 
   render() {

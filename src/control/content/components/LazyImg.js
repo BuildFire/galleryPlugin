@@ -9,13 +9,13 @@ export default class Image extends PureComponent {
   }
 
   handleClick = () => {
-    const { onClick, src } = this.props;
-    if (onClick) onClick(src);
+    const { onClick, id } = this.props;
+    if (onClick) onClick(id);
   };
 
   handleRemove = () => {
-    const { removeImage, src, type } = this.props;
-    if (removeImage) removeImage(src, type);
+    const { removeImage, type, id } = this.props;
+    if (removeImage) removeImage(id, type);
   };
 
   optimizeImage = url => {
