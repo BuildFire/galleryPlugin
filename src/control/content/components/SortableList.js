@@ -23,7 +23,11 @@ export default class SortableList extends Component {
   render() {
     const { children, group, fid } = this.props;
     return (
-      <div id={fid} ref={this.sortableRef} className={`carousel-items hide-empty draggable-list-view ${group}`}>
+      <div
+        id={fid}
+        ref={this.sortableRef}
+        className={`carousel-items hide-empty draggable-list-view ${group}`}
+      >
         {children}
       </div>
     );

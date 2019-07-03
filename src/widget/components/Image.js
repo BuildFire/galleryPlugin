@@ -18,10 +18,7 @@ export default class Image extends PureComponent {
     if (!url.includes('cloudimg.io') || !size || /png-lossy-\d\d.q\d\d/g.test(url)) {
       return url;
     }
-    return url.replace(
-      /\/s\/crop\/\d+\D\d+\//g,
-      `/crop${size[0]}png-lossy-65.q65.i1/`
-    );
+    return url.replace(/\/s\/crop\/\d+\D\d+\//g, `/crop${size[0]}png-lossy-65.q65.i1/`);
   };
 
   handleImgError = e => {
