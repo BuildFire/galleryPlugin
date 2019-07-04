@@ -11,6 +11,8 @@ class Content extends Component {
   constructor(props) {
     super(props);
     this.Datastore = new Datastore();
+    this.deleteFolderTimeout = null;
+    this.busy = false;
     this.state = {
       images: [],
       folders: [],
@@ -128,6 +130,14 @@ class Content extends Component {
   addFolder = () => {
     const afterStateChange = () => {
       History.replace('/folder');
+      setTimeout(() => {
+        const { folder } = this.state;
+        const message = {
+          type: 'folder',
+          folder
+        };
+        messaging.sendMessageToWidget(message);
+      }, 250);
       this.saveWithDelay();
     };
 
@@ -144,6 +154,7 @@ class Content extends Component {
 
   removeFolder = (e, folder) => {
     e.stopPropagation();
+    if (this.busy) return;
 
     const { id, name } = folder;
     const dialogOptions = {
@@ -156,7 +167,13 @@ class Content extends Component {
       }
     };
 
+    const timer = setTimeout(() => {
+      if (this.busy) this.busy = false;
+    }, 5000);
+
     const dialogCallback = (err, result) => {
+      if (timer) clearInterval(timer);
+      this.busy = false;
       const key = result && result.selectedButton ? result.selectedButton.key : err;
 
       if (key === 'confirm' || key === 1 || key === true) {
@@ -172,7 +189,12 @@ class Content extends Component {
       }
     };
 
+    // if (this.deleteFolderTimeout) {
+    //   clearTimeout(this.deleteFolderTimeout);
+    // }
     notifications.confirm(dialogOptions, dialogCallback);
+    // this.deleteFolderTimeout = setTimeout(() => {
+    // }, 500);
   };
 
   openFolder = folder => {

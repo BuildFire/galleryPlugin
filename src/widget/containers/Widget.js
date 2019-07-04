@@ -40,7 +40,14 @@ class Widget extends Component {
   }
 
   viewFolder = folder => {
-    this.setState(() => ({ folder }), () => this.navigateTo('/folder'));
+    this.setState(
+      () => ({ folder }),
+      () => {
+        if (this.History.location.pathname !== '/folder') {
+          this.navigateTo('/folder');
+        }
+      }
+    );
   };
 
   changeView = view => {
@@ -173,6 +180,24 @@ class Widget extends Component {
 
   clearFolder = () => this.setState(() => ({ folder: null }));
 
+  shouldShowNav = () => {
+    const { folders, view } = this.state;
+    let shouldShow = false;
+
+    for (let i = 0; i < folders.length; i += 1) {
+      if (folders[i].images.length) {
+        shouldShow = true;
+        break;
+      }
+    }
+
+    if (!shouldShow && view === 'folders') {
+      this.changeView('gallery');
+    }
+
+    return shouldShow;
+  };
+
   componentDidMount = () => {
     const loadData = (err, result, instanceId) => {
       if (err) throw err;
@@ -219,7 +244,8 @@ class Widget extends Component {
     messaging.onReceivedMessage = message => {
       switch (message.type) {
         case 'home': {
-          this.navigateTo('/');
+          // this.navigateTo('/');
+          history.pop();
           break;
         }
         case 'folder': {
@@ -260,14 +286,13 @@ class Widget extends Component {
     }
   };
 
-  // componentDidUpdate = () => console.warn(this.state);
-
   render() {
     const { images, folders, folder, view, pathname } = this.state;
+    const showNav = this.shouldShowNav();
 
     return (
       <div>
-        {folders && folders.length > 0 && (
+        {showNav && (
           <NavBar
             view={view}
             pathname={pathname}
@@ -285,10 +310,10 @@ class Widget extends Component {
                 return (
                   <Gallery
                     images={images}
-                    folders={folders}
                     view={view}
                     viewImage={this.viewImage}
                     clearFolder={this.clearFolder}
+                    showNav={showNav}
                   />
                 );
               }

@@ -25,7 +25,7 @@ class ImageList extends Component {
     const { fid, type, images, showImageDialog, removeImage, onClick } = this.props;
     return (
       <>
-        <h1 className="title">Gallery</h1>
+        <h1 className="title">{type === 'gallery' ? 'Gallery' : 'Images'}</h1>
         <section className="image__grid">
           <button onClick={showImageDialog} className="btn btn--add" type="button">
             {type === 'gallery' ? 'Add Images' : 'Select Images'}

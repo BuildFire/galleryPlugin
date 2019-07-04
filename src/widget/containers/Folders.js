@@ -5,8 +5,10 @@ const Folders = ({ folders, images, viewFolder }) => (
   <div className="plugin__container">
     <div className="empty__state" />
     <section className="grid grid--folder">
-      <AllPhotos images={images} viewFolder={viewFolder} />
-      {folders && folders.map(folder => <Folder folder={folder} viewFolder={viewFolder} />)}
+      {images && images.length >= 4 && (
+        <AllPhotos images={images} viewFolder={viewFolder} />
+      )}
+      {folders && folders.map(folder => <Folder key={folder.id} folder={folder} viewFolder={viewFolder} />)}
     </section>
   </div>
 );

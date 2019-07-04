@@ -3,7 +3,6 @@ import { Image } from '.';
 
 const AllPhotos = ({ images, viewFolder }) => {
   const thumbnails = images ? images.slice(images.length - 4).map(img => {
-    img.width = 200;
     return img;
   }) : [];
   const handleClick = () => {
@@ -16,7 +15,7 @@ const AllPhotos = ({ images, viewFolder }) => {
   return (
     <div className="grid-item--folder" onClick={handleClick}>
       <div className="subgrid noclick">
-        {thumbnails && thumbnails.map(thumbnail => <Image image={thumbnail} />)}
+        {thumbnails && thumbnails.map(thumbnail => <Image key={thumbnail.id} image={thumbnail} />)}
       </div>
       <h4 className="title ellipsis">All Photos</h4>
     </div>

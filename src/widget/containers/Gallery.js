@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Image } from '../components';
+import { Image, EmptyState } from '../components';
 
 class Gallery extends PureComponent {
   // constructor(props) {
@@ -17,12 +17,13 @@ class Gallery extends PureComponent {
   };
 
   render() {
-    const { viewImage, images, folders } = this.props;
-    const hideFooter = folders && folders.length < 1;
+    const { viewImage, images, showNav } = this.props;
 
     return (
-      <div className={`plugin__container ${hideFooter ? 'nopadding' : ''}`}>
-        <div className="empty__state" />
+      <div className={`plugin__container ${showNav ? '' : 'nopadding'}`}>
+        {(!images || !images.length) && (
+          <EmptyState />
+        )}
         <section className="grid__group">
           <div className="grid grid--img grid--2">
             {images
