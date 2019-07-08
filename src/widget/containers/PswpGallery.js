@@ -20,7 +20,6 @@ const PswpGallery = ({ shareImage }) => (
           <button
             className="pswp__button pswp__button--share"
             onClick={shareImage}
-            onTouchStart={shareImage}
             title="Share"
             type="button"
           />
