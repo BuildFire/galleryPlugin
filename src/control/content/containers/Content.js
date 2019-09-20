@@ -31,7 +31,13 @@ class Content extends Component {
         if (!croppedImg.includes('cloudimg.io')) {
           return src;
         }
-        return croppedImg.replace(/\/s\/crop\/\d+\D\d+\//g, '/cdno/n/q1/');
+
+        let regex = /\/crop\/\d+\D\d+\/n\//g;
+
+        if (croppedImg.indexOf('/s/crop/') > -1) {
+          regex = /\/s\/crop\/\d+\D\d+\//g;
+        }
+        return croppedImg.replace(regex, '/cdno/n/q1/');
       };
 
       const imagePromises = selectedFiles.map(
