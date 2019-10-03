@@ -18,14 +18,6 @@ export default class Image extends PureComponent {
     if (removeImage) removeImage(id, type);
   };
 
-  optimizeImage = url => {
-    const size = url.match(/\/\d+\D\d+\//g);
-    if (!url.includes('cloudimg.io') || !size || /png-lossy-\d\d.q\d\d/g.test(url)) {
-      return url;
-    }
-    return url.replace(/\/s\/crop\/\d+\D\d+\//g, `/crop${size[0]}png-lossy-65.q65.i1/`);
-  };
-
   handleImgError = e => {
     if (e.target) {
       e.target.src = e.target.attributes
@@ -60,19 +52,18 @@ export default class Image extends PureComponent {
     const { imageLib } = window.buildfire;
 
     const placeholderSrc = '../../../../../styles/media/holder-1x1.gif';
-    const croppedSrc = imageLib.cropImage(src, { width: 125, height: 125 });
-    const finalSrc = this.optimizeImage(croppedSrc);
+    const croppedSrc = imageLib.cropImage(src, { width: 125, height: 125, compression: 65 });
 
     return (
       <div className={`image ${selected ? 'selected' : ''}`} onClick={this.handleClick}>
         <img
-          src={fid ? placeholderSrc : finalSrc}
+          src={fid ? placeholderSrc : croppedSrc}
           alt={alt}
           className="lazy"
-          data-src={finalSrc}
+          data-src={croppedSrc}
           data-srcset={srcset}
           data-sizes={sizes}
-          data-fallbacksrc={croppedSrc}
+          data-fallbacksrc={src}
           width={width}
           height={height}
           onError={this.handleImgError}
