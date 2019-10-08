@@ -13,14 +13,6 @@ export default class Image extends PureComponent {
     viewImage(image.src);
   };
 
-  optimizeImage = url => {
-    const size = url.match(/\/\d+\D\d+\//g);
-    if (!url.includes('cloudimg.io') || !size || /png-lossy-\d\d.q\d\d/g.test(url)) {
-      return url;
-    }
-    return url.replace(/\/s\/crop\/\d+\D\d+\//g, `/crop${size[0]}png-lossy-65.q65.i1/`);
-  };
-
   handleImgError = e => {
     if (e.target) {
       e.target.src = e.target.attributes
@@ -43,16 +35,19 @@ export default class Image extends PureComponent {
     const { image } = this.props;
     const { src } = image;
 
-    const croppedSrc = window.buildfire.imageLib.cropImage(src, { width: 125, height: 125 });
-    const finalSrc = this.optimizeImage(croppedSrc);
+    const croppedSrc = window.buildfire.imageLib.cropImage(src, {
+      width: 125,
+      height: 125,
+      compression: 65
+    });
 
     return (
       <div className="img__holder" onClick={this.openImage}>
         <LazyLoad height={125} overflow offset={window.innerHeight} throttle={0}>
           <img
             ref={this.image}
-            src={finalSrc}
-            data-fallbacksrc={croppedSrc}
+            src={croppedSrc}
+            data-fallbacksrc={src}
             alt="placeholder"
             onError={this.handleImgError}
             onLoad={this.handleOnLoad}
