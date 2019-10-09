@@ -61,6 +61,8 @@ class Widget extends Component {
 
     const index = (folderImages || images).findIndex(image => image.src === src);
     const pswpEle = document.getElementsByClassName('pswp')[0];
+    const shareEle = document.getElementsByClassName('pswp__button--share')[0];
+    shareEle.addEventListener('click', this.shareImage);
     const options = {
       index,
       getDoubleTapZoom: (isMouseClick, item) => {
@@ -327,7 +329,7 @@ class Widget extends Component {
             render={() => <ViewFolder folder={folder} viewImage={this.viewImage} />}
           />
         </Router>
-        <PswpGallery shareImage={this.shareImage} />
+        <PswpGallery />
       </div>
     );
   }
