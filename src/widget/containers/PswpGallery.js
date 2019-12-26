@@ -1,6 +1,6 @@
 import React from 'react';
 
-const PswpGallery = ({ shareImage }) => (
+const PswpGallery = () => (
   <div className="pswp" tabIndex="-1" role="dialog" aria-hidden="true">
     <div className="pswp__bg" />
 
@@ -19,7 +19,6 @@ const PswpGallery = ({ shareImage }) => (
 
           <button
             className="pswp__button pswp__button--share"
-            onClick={shareImage}
             title="Share"
             type="button"
           />
