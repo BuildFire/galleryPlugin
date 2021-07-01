@@ -76,38 +76,52 @@ class Widget extends Component {
       preload: [1, 1]
     };
 
-    const galleryItems = (folderImages || images).map(img => {
-      const { width, height } = img;
-      const croppedSrc = imageLib.cropImage(img.src, {
-        width,
-        height,
-        disablePixelRatio: true
+    const dimensionsTestPromises = (folderImages || images).map(img => new Promise(resolve => {
+      if (img.width < 5 || img.height < 5) {
+        const image = new Image();
+        image.onload = () => resolve({ width: image.naturalWidth, height: image.naturalHeight });
+        image.src = img.src;
+        image.originalSrc = img.src;
+      } else {
+        resolve({ width: img.width, height: img.height });
+      }
+    }))
+    
+    Promise.all(dimensionsTestPromises)
+      .then(dimensions => {
+        const galleryItems = (folderImages || images).map((img, index) => {
+          const { width, height } = dimensions[index] ? dimensions[index] : img;
+          const croppedSrc = imageLib.cropImage(img.src, {
+            width,
+            height,
+            disablePixelRatio: true
+          });
+          const msrc = imageLib.cropImage(img.src, {
+            width: width / 2,
+            height: height / 2,
+            compression: 20,
+            disablePixelRatio: true
+          });
+    
+          return {
+            src: croppedSrc,
+            sourceImg: img.src,
+            msrc,
+            w: width,
+            h: height
+          };
+        });
+        this.gallery = new PhotoSwipe(pswpEle, photoSwipeUIdefault, galleryItems, options);
+        this.gallery.init();
+    
+        this.setState(() => ({ pswpOpen: true }));
+    
+        this.gallery.listen('close', () => {
+          spinner.hide();
+          this.setState(() => ({ pswpOpen: false }));
+        });
+        this.gallery.listen('imageLoadComplete', () => spinner.hide());
       });
-      const msrc = imageLib.cropImage(img.src, {
-        width: width / 2,
-        height: height / 2,
-        compression: 20,
-        disablePixelRatio: true
-      });
-
-      return {
-        src: croppedSrc,
-        sourceImg: img.src,
-        msrc,
-        w: width,
-        h: height
-      };
-    });
-    this.gallery = new PhotoSwipe(pswpEle, photoSwipeUIdefault, galleryItems, options);
-    this.gallery.init();
-
-    this.setState(() => ({ pswpOpen: true }));
-
-    this.gallery.listen('close', () => {
-      spinner.hide();
-      this.setState(() => ({ pswpOpen: false }));
-    });
-    this.gallery.listen('imageLoadComplete', () => spinner.hide());
   };
 
   shareImage = () => {
