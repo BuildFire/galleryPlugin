@@ -44,7 +44,7 @@ class Content extends Component {
         src => new Promise(resolve => {
           const image = new Image();
           image.onload = () => resolve(image);
-          image.src = optimizeImg(src);
+          image.src = src;
           image.originalSrc = src;
         })
       );
