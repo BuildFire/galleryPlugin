@@ -52,9 +52,9 @@ class EditFolder extends Component {
           <span className="icon icon-cross2" />
         </button>
 
-        <div className="input__group">
+        <div className="input__group input-control side-label">
           <label htmlFor="name">Folder Name</label>
-          <Input name="name" value={name} onChange={handleInputChange} />
+          <Input name="name" className="flex-auto" value={name} onChange={handleInputChange} />
         </div>
 
         <ImageList
@@ -68,7 +68,7 @@ class EditFolder extends Component {
 
         {!images || !images.length ? (
           <p className="info__note margin-top-twenty">
-            Note: Folders require at least one image, otherwise the folder will not be displayed to
+            Folders require at least one image, otherwise the folder will not be displayed to
             users.
           </p>
         ) : null}

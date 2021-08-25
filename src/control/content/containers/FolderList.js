@@ -9,8 +9,8 @@ const FolderList = ({ folders, addFolder, removeFolder, openFolder, handleReorde
     <>
       <h1 className="title">Folders</h1>
 
-      <button onClick={addFolder} className="btn btn--primary" type="button">
-        Create Folder
+      <button onClick={addFolder} className="btn btn-success btn-add" type="button">
+        Add Folder
       </button>
 
       <SortableList group="row" handleReorder={onReorder}>
