@@ -13,7 +13,9 @@ const FolderList = ({ folders, addFolder, removeFolder, openFolder, handleReorde
         Add Folder
       </button>
 
-      <SortableList group="row" handleReorder={onReorder}>
+      {!folders || folders.length === 0 ? <div style={{marginTop: '15px'}} className="empty-state"><h4>You haven't added any folders</h4></div> : ''}
+
+      {folders || folders.length > 0 ? <SortableList group="row" handleReorder={onReorder}>
         {folders
           && folders.map(folder => (
             <Folder
@@ -23,7 +25,7 @@ const FolderList = ({ folders, addFolder, removeFolder, openFolder, handleReorde
               removeFolder={removeFolder}
             />
           ))}
-      </SortableList>
+      </SortableList> : ''}
     </>
   );
 };

@@ -187,7 +187,15 @@ WebpackConfig.plugins.push(
         '*.tsx'
       ]
     }
-  )
+  ),
+  new CopyWebpackPlugin(
+    [ 
+      {
+        from: path.join(__dirname, 'src/control/assets'),
+        to: path.join(__dirname, 'dist/control/assets')
+      },
+    ],
+  ),
 );
 
 if (!DEV) {

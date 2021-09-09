@@ -8,7 +8,10 @@ const Input = ({ name, pattern, value, onChange, placeholder, showLabel }) => {
   return (
     <div className="input--text label--horizontal flex-auto">
       {showLabel ? <label htmlFor={name}>{label}*</label> : null}
-      <input className="form-control flex-auto" type="text" pattern={pattern} name={name} onChange={onChange} placeholder={placeholder || ''} value={value} />
+      <input className={"form-control flex-auto" + ( value.length === 0 ? ' border-danger' : '')} type="text" pattern={pattern} name={name} onChange={onChange} placeholder={placeholder || ''} value={value} />
+      {value.length === 0 && <div className="text-left text-danger margin-top-five text-small">
+            Required
+      </div>}
     </div>
   );
 };

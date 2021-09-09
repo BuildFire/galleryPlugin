@@ -5,7 +5,7 @@ import { Route, Router } from 'react-router-dom';
 import { Folder, Img, History, Datastore } from '../scripts';
 import { Home, EditFolder } from '.';
 
-const { imageLib, notifications, messaging } = window.buildfire;
+const { imageLib, dialog, messaging } = window.buildfire;
 
 class Content extends Component {
   constructor(props) {
@@ -16,7 +16,11 @@ class Content extends Component {
     this.state = {
       images: [],
       folders: [],
-      folder: null
+      folder: null,
+      originalState: {
+        folders: [],
+        images: []
+      }
     };
   }
 
@@ -65,7 +69,6 @@ class Content extends Component {
 
             return { images };
           },
-          () => this.saveWithDelay()
         );
       });
     };
@@ -84,7 +87,6 @@ class Content extends Component {
 
         return { folder, folders };
       },
-      () => this.saveWithDelay()
     );
   };
 
@@ -100,7 +102,6 @@ class Content extends Component {
           });
           return { images, folders };
         },
-        () => this.saveWithDelay()
       );
     };
 
@@ -115,7 +116,6 @@ class Content extends Component {
 
           return { folder, folders };
         },
-        () => this.saveWithDelay()
       );
     };
 
@@ -135,15 +135,15 @@ class Content extends Component {
 
   addFolder = () => {
     const afterStateChange = () => {
-      History.replace('/folder');
-      setTimeout(() => {
-        const { folder } = this.state;
-        const message = {
-          type: 'folder',
-          folder
-        };
-        messaging.sendMessageToWidget(message);
-      }, 250);
+      // History.replace('/folder');
+      // setTimeout(() => {
+      //   const { folder } = this.state;
+      //   const message = {
+      //     type: 'folder',
+      //     folder
+      //   };
+      //   messaging.sendMessageToWidget(message);
+      // }, 250);
       this.saveWithDelay();
     };
 
@@ -164,7 +164,7 @@ class Content extends Component {
 
     const { id, name } = folder;
     const dialogOptions = {
-      title: `Delete ${name}?`,
+      title: `Delete Folder`,
       message: `Are you sure you want to delete ${name}? This cannot be undone!`,
       confirmButton: {
         text: 'Delete',
@@ -177,12 +177,11 @@ class Content extends Component {
       if (this.busy) this.busy = false;
     }, 5000);
 
-    const dialogCallback = (err, result) => {
+    const dialogCallback = (err, confirmed) => {
       if (timer) clearInterval(timer);
       this.busy = false;
-      const key = result && result.selectedButton ? result.selectedButton.key : err;
 
-      if (key === 'confirm' || key === 1 || key === true) {
+      if (confirmed) {
         this.setState(
           state => {
             let { folders } = { ...state };
@@ -198,7 +197,7 @@ class Content extends Component {
     // if (this.deleteFolderTimeout) {
     //   clearTimeout(this.deleteFolderTimeout);
     // }
-    notifications.confirm(dialogOptions, dialogCallback);
+    dialog.confirm(dialogOptions, dialogCallback);
     // this.deleteFolderTimeout = setTimeout(() => {
     // }, 500);
   };
@@ -221,7 +220,7 @@ class Content extends Component {
     const reorderGalleryImages = () => {
       const { images } = { ...this.state };
       images.splice(newIndex, 0, images.splice(oldIndex, 1)[0]);
-      this.setState(() => ({ images }), () => this.saveWithDelay());
+      this.setState(() => ({ images }));
     };
 
     const reorderFolderImages = () => {
@@ -234,8 +233,7 @@ class Content extends Component {
           folders[index] = folder;
 
           return { folder, folders };
-        },
-        () => this.saveWithDelay()
+        }
       );
     };
 
@@ -275,7 +273,6 @@ class Content extends Component {
 
         return { folder, folders };
       },
-      () => this.saveWithDelay()
     );
   };
 
@@ -292,8 +289,23 @@ class Content extends Component {
     const obj = { images, folders };
     this.Datastore.saveWithDelay(obj, err => {
       if (err) throw err;
+
+      let originalState = JSON.parse(JSON.stringify({...obj}))
+      this.setState({ originalState });
     });
   };
+
+  cancelSave = () => {
+    // Revert changes
+    let currentFolderId = this.state.folder.id;
+    let folder = this.state.originalState.folders.find(folder => folder.id === currentFolderId);
+    if (folder) {
+      folder = JSON.parse(JSON.stringify(folder));
+    }
+    const folders = JSON.parse(JSON.stringify(this.state.originalState.folders))
+
+    this.setState({ folders, folder })
+  }
 
   handleInputChange = e => {
     const { name, value } = e.target;
@@ -303,7 +315,6 @@ class Content extends Component {
         folder[name] = value;
         return { folder };
       },
-      () => this.saveWithDelay()
     );
   };
 
@@ -311,8 +322,11 @@ class Content extends Component {
     const loadData = (err, result) => {
       if (err) throw err;
       const { images, folders } = result.data;
+
+      let originalState = JSON.parse(JSON.stringify({ ...result.data }))
+
       if (images && folders) {
-        this.setState(() => ({ images, folders }));
+        this.setState(() => ({ images, folders, originalState }));
       }
     };
 
@@ -353,6 +367,8 @@ class Content extends Component {
               handleReorder={this.handleReorder}
               addImagesToFolder={this.addImagesToFolder}
               handleInputChange={this.handleInputChange}
+              saveWithDelay={this.saveWithDelay}
+              cancelSave={this.cancelSave}
             />
           )}
         />

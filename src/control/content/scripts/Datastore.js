@@ -28,7 +28,7 @@ export default class Datastore {
 
     this.timeout = setTimeout(() => {
       this.save(object, callback);
-    }, 1000);
+    }, 0);
   };
 
   onUpdate = callback => datastore.onUpdate(callback, false);
