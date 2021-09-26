@@ -116,7 +116,7 @@ html[buildfire] .d-item .btn-edit-icon:hover::after{
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  top: 2px !important;
+  top: 0 !important;
   width: 100%;
 }
 
@@ -172,4 +172,25 @@ html[buildfire] .d-item .btn-edit-icon:hover::after{
 
 a.text-primary.text {
   top: 5px !important
+}
+
+.draggable-list-view .d-item .copy span.btn-icon {
+  top: -1px !important;
+}
+
+
+.draggable-list-view .d-item:not(:first-child) {
+  border-top: none;
+}
+
+.draggable-list-view .d-item:first-child {
+  border-radius: 0;
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+}
+
+.draggable-list-view .d-item:last-child {
+  border-radius: 0;
+  border-bottom-left-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
 }

@@ -238,7 +238,7 @@ section.image__grid {
     transition: transform ease-in-out 0.1s, box-shadow ease-in-out 0.1s;
     // Selected state
     &.selected {
-      border: 0.25rem solid #05acf0;
+      box-shadow: 0 0 0 2px #09a3ee;
       &::before {
         content: '';
         position: absolute;
@@ -314,7 +314,7 @@ span {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 0.5rem;
+    // margin-bottom: 0.5rem;
     border: 1px solid #ddd;
     border-radius: 0.25rem;
     background-color: #fff;
@@ -395,6 +395,7 @@ span {
 }
 /* Modal */
 .modal {
+  overflow: auto;
   &.modal__container {
     background-color: #fff !important;
   }
@@ -479,4 +480,8 @@ p.info__note {
 }
 .text-danger {
   color: #ed4b4b;
+}
+
+.modal__container.show {
+  overflow: auto;
 }

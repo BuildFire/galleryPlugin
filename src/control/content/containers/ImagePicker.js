@@ -34,12 +34,11 @@ export default class ImagePicker extends Component {
           })}
         </SortableList>
         <div className="modal__footer">
-          <button className="btn btn--ghost" onClick={toggleImagesModal} type="button">
-            Close
-          </button>
-          <button className="btn btn--add btn--lg" onClick={handleAddImages} type="button">
-            Add
-          </button>
+          <a className="btn btn-default btn-outlined" onClick={toggleImagesModal} style={{border: '1px solid rgb(221, 221, 221)', marginRight: '10px'}}>Cancel</a>
+          <a className="btn btn-success" onClick={() => {
+            handleAddImages();
+            toggleImagesModal();
+          }}>Add</a>
         </div>
       </div>
     );

@@ -69,6 +69,7 @@ class Content extends Component {
 
             return { images };
           },
+          () => this.saveWithDelay()
         );
       });
     };
@@ -101,7 +102,7 @@ class Content extends Component {
             return folder;
           });
           return { images, folders };
-        },
+        },() => this.saveWithDelay()
       );
     };
 
@@ -220,7 +221,7 @@ class Content extends Component {
     const reorderGalleryImages = () => {
       const { images } = { ...this.state };
       images.splice(newIndex, 0, images.splice(oldIndex, 1)[0]);
-      this.setState(() => ({ images }));
+      this.setState(() => ({ images }), () => this.saveWithDelay());
     };
 
     const reorderFolderImages = () => {
