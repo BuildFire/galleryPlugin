@@ -86,6 +86,8 @@ class Content extends Component {
         const index = folders.findIndex(({ id }) => id === folder.id);
         folders[index] = folder;
 
+        messaging.sendMessageToWidget({ type: 'folder', folder });
+        
         return { folder, folders };
       },
     );
@@ -114,6 +116,8 @@ class Content extends Component {
 
           const index = folders.findIndex(({ id }) => id === folder.id);
           folders[index] = folder;
+
+          messaging.sendMessageToWidget({ type: 'folder', folder });
 
           return { folder, folders };
         },
@@ -233,6 +237,8 @@ class Content extends Component {
           const index = folders.findIndex(({ id }) => id === folder.id);
           folders[index] = folder;
 
+          messaging.sendMessageToWidget({ type: 'folder', folder });
+
           return { folder, folders };
         }
       );
@@ -271,6 +277,8 @@ class Content extends Component {
 
         const index = folders.findIndex(({ id }) => id === folder.id);
         folders[index] = folder;
+
+        messaging.sendMessageToWidget({ type: 'folder', folder });
 
         return { folder, folders };
       },
@@ -314,6 +322,8 @@ class Content extends Component {
       state => {
         const { folder } = { ...state };
         folder[name] = value;
+
+        messaging.sendMessageToWidget({ type: 'folder', folder });
         return { folder };
       },
     );

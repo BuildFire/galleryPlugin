@@ -26,11 +26,13 @@ class ImageList extends Component {
     return (
       <>
         <h1 className="title margin-bottom-lg">{type === 'gallery' ? 'Gallery' : 'Images'}</h1>
-        <p className="info-note">Add images to create a gallery and organize it with folders. You can drag and drop images on the image grid to rearrange their order.</p>
-        <section className="image__grid">
-          <button onClick={showImageDialog} className="btn btn-success btn-add" type="button">
+        <div style={{display: 'flex'}}>
+        <button onClick={showImageDialog} className="btn btn-success btn-add" type="button" style={{flex: 'none', marginRight: '15px'}}>
             {type === 'gallery' ? 'Add Images' : 'Add Images'}
           </button>
+        </div>
+        <p className="info-note" style={{margin: '15px 0'}}>Add images to create a gallery and organize it with folders. You can drag and drop images on the image grid to rearrange their order.</p>
+        <section className="image__grid">
           {!images || images.length === 0 ? <div style={{flexGrow: 1, marginLeft: '10px'}} className="empty-state"><h4>You haven't added any images</h4></div> : ''}
 
           {images && images.length > 0 ? <SortableList fid={fid} group="grid" handleReorder={e => this.onReorder(e)}>
