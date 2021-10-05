@@ -41,21 +41,38 @@ class EditFolder extends Component {
   };
 
   render() {
-    const { folder, removeImage, handleReorder, goHome, handleInputChange } = this.props;
+    const { folder, removeImage, handleReorder, goHome, handleInputChange, saveWithDelay, cancelSave } = this.props;
     const { showModal, galleryImages } = this.state;
     const { images, name } = folder;
+
+    const save = () =>  {
+      if (folder.name.length === 0) {
+      } else {
+        saveWithDelay();
+        goHome();
+      }
+    }
+
+    const cancel = () => {
+      cancelSave();
+      goHome();
+    }
 
     return (
       <>
         <h1 className="title">Edit Folder</h1>
-        <button className="btn btn--icon btn--close" onClick={goHome} type="button">
-          <span className="icon icon-cross2" />
-        </button>
 
-        <div className="input__group">
-          <label htmlFor="name">Folder Name</label>
-          <Input name="name" value={name} onChange={handleInputChange} />
+        <div className="input__group input-control side-label">
+          <label htmlFor="name">Folder Name <span className="required">*</span></label>
+          <Input name="name" className="flex-auto" value={name} onChange={handleInputChange} />
         </div>
+
+        {!images || !images.length ? (
+          <p className="info__note margin-top-twenty">
+            Folders require at least one image, otherwise the folder will not be displayed to
+            users.
+          </p>
+        ) : null}
 
         <ImageList
           type="folder"
@@ -65,13 +82,6 @@ class EditFolder extends Component {
           removeImage={removeImage}
           handleReorder={handleReorder}
         />
-
-        {!images || !images.length ? (
-          <p className="info__note margin-top-twenty">
-            Note: Folders require at least one image, otherwise the folder will not be displayed to
-            users.
-          </p>
-        ) : null}
 
         <Modal show={showModal} toggle={this.toggleImagesModal}>
           <ImagePicker
@@ -83,6 +93,11 @@ class EditFolder extends Component {
             handleAddImages={this.handleAddImages}
           />
         </Modal>
+        <br /><br />
+        <div className="bottom-actions">
+            <a className="btn btn-default btn-outlined margin-right-ten" onClick={cancel} style={{border: "1px solid #ddd"}}>Cancel</a>
+            <a className="btn btn-success margin-right-ten" onClick={save}>Save</a>
+        </div>
       </>
     );
   }
