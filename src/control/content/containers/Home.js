@@ -17,7 +17,7 @@ const Home = ({
   if (showEmptyState) {
     const seeder = new buildfire.components.aiStateSeeder({
       generateOptions: {
-        userMessage: 'Provide me with images that relate to healthcare providers',
+        userMessage: 'Provide me with images that relate to [app-interests]',
         systemMessage: 'Generate small array of image urls based on the input, use source.unsplash.com for image URLs. Create equal number of folders associated with the topic as images array.',
         jsonTemplate: {
           images: [],
