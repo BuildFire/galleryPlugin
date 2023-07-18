@@ -20,7 +20,8 @@ class Content extends Component {
       originalState: {
         folders: [],
         images: []
-      }
+      },
+      showEmptyState: false
     };
   }
 
@@ -329,24 +330,28 @@ class Content extends Component {
     );
   };
 
+  handleEmptyState = state => {
+    this.setState({ images: state.images, folders: state.folders, showEmptyState: false }, () => {
+      this.saveWithDelay();
+    });
+  } 
+
   componentDidMount = () => {
     const loadData = (err, result) => {
       if (err) throw err;
       const { images, folders } = result.data;
-
       let originalState = JSON.parse(JSON.stringify({ ...result.data }))
 
       if (images && folders) {
         this.setState(() => ({ images, folders, originalState }));
-      }
+      } else this.setState(() => ({ showEmptyState: true }));
     };
 
     this.Datastore.get((error, result) => loadData(error, result));
   };
 
   render() {
-    const { images, folders, folder } = this.state;
-
+    const { images, folders, folder, showEmptyState } = this.state;
     return (
       <Router history={History}>
         <Route
@@ -356,12 +361,14 @@ class Content extends Component {
             <Home
               images={images}
               folders={folders}
+              showEmptyState={showEmptyState}
               removeImage={this.removeImage}
               addFolder={this.addFolder}
               removeFolder={this.removeFolder}
               openFolder={this.openFolder}
               showImageDialog={this.showImageDialog}
               handleReorder={this.handleReorder}
+              handleEmptyState={this.handleEmptyState}
             />
           )}
         />
