@@ -6,25 +6,25 @@ const Home = ({
   images,
   removeImage,
   folders,
+  loaded,
   showEmptyState,
   showImageDialog,
   addFolder,
   removeFolder,
   openFolder,
   handleReorder,
-  handleEmptyState
+  saveSampleAiData
 }) => {
-  if (showEmptyState) {
+  if (loaded && showEmptyState) {
     const seeder = new buildfire.components.aiStateSeeder({
       generateOptions: {
         userMessage: 'Provide me with images that relate to [app-interests]',
-        systemMessage: 'Generate small array of image urls based on the input, use source.unsplash.com for image URLs. Create equal number of folders associated with the topic as images array.',
+        systemMessage: 'Generate up to five image urls based on the input, use source.unsplash.com for image URLs. Create equal number of folders associated with the topic as images array.',
         jsonTemplate: {
           images: [],
           folders: [
             {
-              name: "",
-              images: []
+              name: ""
             }
           ]
         }
@@ -35,12 +35,11 @@ const Home = ({
           folders: [
             {
               name: "",
-              images: []
             }
           ]
         },
         sampleCsv: 'https://source.unsplash.com/featured/?sunny, https://source.unsplash.com/featured/?rainy, https://source.unsplash.com/featured/?cloudy\n\rSunny, Rainy, Cloudy',
-        systemMessage: `First row are images, second row are folders.`,
+        systemMessage: `First row are images, second row are folders. Generate up to five items.`,
       }
     })
       .smartShowEmptyState({ selector: "#ai-seeder", }, (err, result) => {
@@ -67,14 +66,15 @@ const Home = ({
           });
 
           seeder.requestResult.complete();
-          handleEmptyState({ images, folders })
+          saveSampleAiData({ images, folders }, seeder.requestType);
         });
       });
   }
   return (
     <>
-      {showEmptyState ? <div id='ai-seeder'></div> : <></>}
+      {loaded ?
       <>
+      {showEmptyState ? <div id='ai-seeder'></div> : <></>}
           <ImageList
             type="gallery"
             fid="gallery-image-list"
@@ -91,6 +91,8 @@ const Home = ({
             handleReorder={handleReorder}
           />
         </>
+      : <></>}
+      
     </>
   )
 }

@@ -330,10 +330,16 @@ class Content extends Component {
     );
   };
 
-  handleEmptyState = state => {
-    this.setState({ images: state.images, folders: state.folders, showEmptyState: false }, () => {
-      this.saveWithDelay();
-    });
+  saveSampleAiData = (state, type) => {
+    if(type == "generate") {
+      this.setState({ images: state.images, folders: state.folders, showEmptyState: false }, () => {
+        this.saveWithDelay();
+      });
+    } else {
+      this.setState({ images: [...this.state.images, ...state.images], folders: [...this.state.folders, ...state.folders], showEmptyState: false }, () => {
+        this.saveWithDelay();
+      });
+    }
   } 
 
   componentDidMount = () => {
@@ -343,15 +349,15 @@ class Content extends Component {
       let originalState = JSON.parse(JSON.stringify({ ...result.data }))
 
       if (images && folders) {
-        this.setState(() => ({ images, folders, originalState }));
-      } else this.setState(() => ({ showEmptyState: true }));
+        this.setState(() => ({ images, folders, originalState, loaded: true }));
+      } else this.setState(() => ({ showEmptyState: true, loaded: true }));
     };
 
     this.Datastore.get((error, result) => loadData(error, result));
   };
 
   render() {
-    const { images, folders, folder, showEmptyState } = this.state;
+    const { images, folders, folder, showEmptyState, loaded } = this.state;
     return (
       <Router history={History}>
         <Route
@@ -361,6 +367,7 @@ class Content extends Component {
             <Home
               images={images}
               folders={folders}
+              loaded={loaded}
               showEmptyState={showEmptyState}
               removeImage={this.removeImage}
               addFolder={this.addFolder}
@@ -368,7 +375,7 @@ class Content extends Component {
               openFolder={this.openFolder}
               showImageDialog={this.showImageDialog}
               handleReorder={this.handleReorder}
-              handleEmptyState={this.handleEmptyState}
+              saveSampleAiData={this.saveSampleAiData}
             />
           )}
         />
