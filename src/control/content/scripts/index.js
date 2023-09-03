@@ -12,6 +12,7 @@ class Img {
     this.src = image.src || '';
     this.width = image.width || null;
     this.height = image.height || null;
+    this.isImageValid = image.isValid;
   }
 }
 

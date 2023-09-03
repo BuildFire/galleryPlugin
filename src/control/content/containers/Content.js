@@ -348,9 +348,11 @@ class Content extends Component {
       const { images, folders } = result.data;
       let originalState = JSON.parse(JSON.stringify({ ...result.data }))
 
-      if (images && folders) {
+      if ((images && images.length) || (folders && folders.length) ) {
         this.setState(() => ({ images, folders, originalState, loaded: true }));
-      } else this.setState(() => ({ showEmptyState: true, loaded: true }));
+      } 
+      else
+       this.setState(() => ({ showEmptyState: true, loaded: true }));
     };
 
     this.Datastore.get((error, result) => loadData(error, result));
