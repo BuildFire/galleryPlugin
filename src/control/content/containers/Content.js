@@ -330,13 +330,13 @@ class Content extends Component {
     );
   };
 
-  saveSampleAiData = (state, type) => {
-    if(type == "generate") {
-      this.setState({ images: state.images, folders: state.folders, showEmptyState: false }, () => {
+  onSaveAIData = (data, reset) => {
+    if(reset) {
+      this.setState({ images: data.images, folders: data.folders, showEmptyState: false }, () => {
         this.saveWithDelay();
       });
     } else {
-      this.setState({ images: [...this.state.images, ...state.images], folders: [...this.state.folders, ...state.folders], showEmptyState: false }, () => {
+      this.setState({ images: [...this.state.images, ...data.images], folders: [...this.state.folders, ...data.folders], showEmptyState: false }, () => {
         this.saveWithDelay();
       });
     }
@@ -351,8 +351,9 @@ class Content extends Component {
       if ((images && images.length) || (folders && folders.length) ) {
         this.setState(() => ({ images, folders, originalState, loaded: true }));
       } 
-      else
-       this.setState(() => ({ showEmptyState: true, loaded: true }));
+      else {
+        this.setState(() => ({ showEmptyState: true, loaded: true }));
+      }
     };
 
     this.Datastore.get((error, result) => loadData(error, result));
@@ -377,7 +378,7 @@ class Content extends Component {
               openFolder={this.openFolder}
               showImageDialog={this.showImageDialog}
               handleReorder={this.handleReorder}
-              saveSampleAiData={this.saveSampleAiData}
+              saveAIData={this.onSaveAIData}
             />
           )}
         />
