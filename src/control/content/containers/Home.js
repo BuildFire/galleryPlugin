@@ -147,6 +147,7 @@ const Home = ({
           + 'City:https://source.unsplash.com/featured/?street',
         systemMessage: 'Each row contains a folder name and image URL that should belong to. if nothing provided or no URLs provided then return null',
         maxRecords: 5,
+        hintText: '<div>To import your data, enter each folder and image URL pair on a new line.</div><div>Use the format: FolderName:ImageURL.</div>',
         callback: (err, result) => {
           if (
             err ||
