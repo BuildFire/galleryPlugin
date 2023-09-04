@@ -52,7 +52,7 @@ const Home = ({
       generateOptions: {
         userMessage: 'Provide me with images that relate to [app-interests]',
         systemMessage: 'Use source.unsplash.com for image URLs, image should be 1080x720, use different image for each entry, URL should not have premium_photo or source.unsplash.com/random. Do not remove white spaces in the subject string.',
-        hintText: 'Replace values between brackets to match your business requirements.',
+        hintText: 'Replace values between brackets to match your requirements.',
         maxRecords: 10,
         jsonTemplate: {
           images: [
@@ -142,12 +142,12 @@ const Home = ({
         jsonTemplate: {
           folders: [{ name: '', images: [{ url: '' }] }]
         },
-        sampleCSV: 'Weather: https://source.unsplash.com/featured/?sunny\n'
-          + 'Weather:https://source.unsplash.com/featured/?rainy\n'
-          + 'City:https://source.unsplash.com/featured/?street',
+        sampleCSV: 'Weather, https://source.unsplash.com/featured/?sunny\n'
+          + 'Weather, https://source.unsplash.com/featured/?rainy\n'
+          + 'City, https://source.unsplash.com/featured/?street',
         systemMessage: 'Each row contains a folder name and image URL that should belong to. if nothing provided or no URLs provided then return null',
         maxRecords: 5,
-        hintText: '<div>To import your data, enter each folder and image URL pair on a new line.</div><div>Use the format: FolderName:ImageURL.</div>',
+        hintText: 'You may repeat a folder name on multiple lines to assign multiple images to the same folder.',
         callback: (err, result) => {
           if (
             err ||
