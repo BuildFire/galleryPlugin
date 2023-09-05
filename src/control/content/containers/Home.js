@@ -36,7 +36,7 @@ const Home = ({
             resolve({isValid: false, newURL: null});
           }
           xhr.onload = () => {
-            if (xhr.responseURL.includes('source-404')) {
+            if (xhr.responseURL.includes('source-404') || xhr.status == 404) {
               return resolve({isValid: false ,newURL: null});
             } else {
               return resolve({isValid: true, newURL: xhr.responseURL.replace('h=100', 'h=720').replace('w=100', 'w=1080') });
