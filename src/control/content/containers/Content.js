@@ -20,7 +20,8 @@ class Content extends Component {
       originalState: {
         folders: [],
         images: []
-      }
+      },
+      showEmptyState: false
     };
   }
 
@@ -61,12 +62,11 @@ class Content extends Component {
             height: naturalHeight
           })
         );
-
+        this.setState({showEmptyState: false});
         this.setState(
           state => {
             let { images } = { ...state };
             images = [...images, ...newImages];
-
             return { images };
           },
           () => this.saveWithDelay()
@@ -151,7 +151,7 @@ class Content extends Component {
       // }, 250);
       this.saveWithDelay();
     };
-
+    this.setState({showEmptyState: false});
     this.setState(
       state => {
         const { folders } = { ...state };
@@ -329,15 +329,29 @@ class Content extends Component {
     );
   };
 
+  onSaveAIData = (data, reset) => {
+    if(reset) {
+      this.setState({ images: data.images, folders: data.folders, showEmptyState: false }, () => {
+        this.saveWithDelay();
+      });
+    } else {
+      this.setState({ images: [...this.state.images, ...data.images], folders: [...this.state.folders, ...data.folders], showEmptyState: false }, () => {
+        this.saveWithDelay();
+      });
+    }
+  } 
+
   componentDidMount = () => {
     const loadData = (err, result) => {
       if (err) throw err;
       const { images, folders } = result.data;
-
       let originalState = JSON.parse(JSON.stringify({ ...result.data }))
 
-      if (images && folders) {
-        this.setState(() => ({ images, folders, originalState }));
+      if ((images && images.length) || (folders && folders.length) ) {
+        this.setState(() => ({ images, folders, originalState, loaded: true }));
+      } 
+      else {
+        this.setState(() => ({ showEmptyState: true, loaded: true }));
       }
     };
 
@@ -345,8 +359,7 @@ class Content extends Component {
   };
 
   render() {
-    const { images, folders, folder } = this.state;
-
+    const { images, folders, folder, showEmptyState, loaded } = this.state;
     return (
       <Router history={History}>
         <Route
@@ -356,12 +369,15 @@ class Content extends Component {
             <Home
               images={images}
               folders={folders}
+              loaded={loaded}
+              showEmptyState={showEmptyState}
               removeImage={this.removeImage}
               addFolder={this.addFolder}
               removeFolder={this.removeFolder}
               openFolder={this.openFolder}
               showImageDialog={this.showImageDialog}
               handleReorder={this.handleReorder}
+              saveAIData={this.onSaveAIData}
             />
           )}
         />
