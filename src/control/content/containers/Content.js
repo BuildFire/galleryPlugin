@@ -62,12 +62,11 @@ class Content extends Component {
             height: naturalHeight
           })
         );
-
+        this.setState({showEmptyState: false});
         this.setState(
           state => {
             let { images } = { ...state };
             images = [...images, ...newImages];
-
             return { images };
           },
           () => this.saveWithDelay()
@@ -152,7 +151,7 @@ class Content extends Component {
       // }, 250);
       this.saveWithDelay();
     };
-
+    this.setState({showEmptyState: false});
     this.setState(
       state => {
         const { folders } = { ...state };
