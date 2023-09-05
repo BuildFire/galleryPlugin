@@ -50,7 +50,7 @@ const Home = ({
 
     const seeder = new buildfire.components.aiStateSeeder({
       generateOptions: {
-        userMessage: 'Provide me with images that relate to [app-interests]',
+        userMessage: 'Provide me with images that relate to [Traveling]',
         systemMessage: 'Use source.unsplash.com for image URLs, image should be 1080x720, use different image for each entry, URL should not have premium_photo or source.unsplash.com/random. Do not remove white spaces in the subject string.',
         hintText: 'Replace values between brackets to match your requirements.',
         maxRecords: 10,
