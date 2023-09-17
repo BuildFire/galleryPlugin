@@ -1,7 +1,7 @@
 {
   "author":"BuildFire",
   "pluginName": "Image Gallery",
-  "pluginDescription": "Showcase your images in a familiar format with this beautiful image gallery. Organize images into folders for your users to browse and view in high fidelity. It's simple and intuitive design, snappy performance, and crisp clarity bring your images into the limelight. Related Topics: Photos, Instagram",
+  "pluginDescription": "Showcase visual content with ease.",
   "pluginKeywords":"instagram,gallery,picture,image,photo",
   "supportEmail":"support@buildfire.com",
   "control": {
@@ -18,5 +18,31 @@
   "widget":{},
   "features" : [{"name": "sharing"}],
   "webpack": "8080",
-  "languages" : ["en"]
+  "languages" : ["en"],
+  "media": [
+    {
+      "type": "image-resource",
+      "path": "1-Plugin.png"
+    },
+    {
+      "type": "image-resource",
+      "path": "2-Benefits.png"
+    },
+    {
+      "type": "image-resource",
+      "path": "3-Use-Cases.png"
+    },
+    {
+      "type": "image-resource",
+      "path": "4-Content-Tab.png"
+    },
+    {
+      "type": "image-resource",
+      "path": "5-Analytics-Tab.png"
+    },
+    {
+      "type": "youtube-video",
+      "path": "https://www.youtube.com/watch?v=NpKCUbgMGEQ"
+    }
+  ]
 }
