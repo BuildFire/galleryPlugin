@@ -35,7 +35,8 @@ class Widget extends Component {
       view: 'gallery',
       showImageModal: false,
       index: 0,
-      pswpOpen: false
+      pswpOpen: false,
+      context: {},
     };
   }
 
@@ -63,6 +64,12 @@ class Widget extends Component {
     const pswpEle = document.getElementsByClassName('pswp')[0];
     const shareEle = document.getElementsByClassName('pswp__button--share')[0];
     shareEle.addEventListener('click', this.shareImage);
+    
+    if (this.state.context.device.platform === 'Android') {
+      const fullScreenEle = document.getElementsByClassName('pswp__button--fs')[0];
+      fullScreenEle.addEventListener('click', this.openImageFullScreen);
+    }
+    
     const options = {
       index,
       getDoubleTapZoom: (isMouseClick, item) => {
@@ -130,6 +137,15 @@ class Widget extends Component {
     const obj = { image: sourceImg };
     device.share(obj, () => spinner.hide());
   };
+
+  openImageFullScreen = () => {
+    const { sourceImg } = this.gallery.currItem;
+    buildfire.imagePreviewer.show(
+      {
+        images: [sourceImg],
+      }, () => {}
+    );
+  }
 
   bookmark = () => {
     const { folder } = { ...this.state };
@@ -231,6 +247,7 @@ class Widget extends Component {
 
     getContext((err, context) => {
       if (err) throw err;
+      this.setState({ context });
       const { instanceId } = context;
 
       datastore.get('gallery', (error, result) => {
@@ -243,6 +260,13 @@ class Widget extends Component {
       const cache = localStorage.getItem(`${instanceId}.gallery_cache`);
       if (cache) {
         loadData(null, { data: JSON.parse(cache) });
+      }
+
+      if (context.device.platform === 'Android') {
+        // disable fullscreen on android, and instead will use buildfire image previewer
+        HTMLElement.prototype.requestFullscreen = function() {
+          return;
+        };
       }
     });
 
