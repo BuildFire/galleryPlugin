@@ -72,8 +72,8 @@
 .pswp__button--share {
   background-position: -44px -44px; }
 
-.pswp--fs .pswp__button--fs {
-  background-position: -44px 0; }
+.pswp__button--fs {
+  display: none; }
 
 .pswp__button--zoom {
   display: none;

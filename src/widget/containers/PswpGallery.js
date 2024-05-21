@@ -23,12 +23,6 @@ const PswpGallery = () => (
             type="button"
           />
 
-          <button
-            className="pswp__button pswp__button--fs"
-            title="Toggle fullscreen"
-            type="button"
-          />
-
           <button className="pswp__button pswp__button--zoom" title="Zoom in/out" type="button" />
 
           <div className="pswp__preloader">
