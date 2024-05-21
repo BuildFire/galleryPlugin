@@ -257,6 +257,11 @@ class Widget extends Component {
       if (cache) {
         loadData(null, { data: JSON.parse(cache) });
       }
+
+      // disable fullscreen, and instead will use buildfire image previewer
+      HTMLElement.prototype.requestFullscreen = function() {
+        return;
+      };
     });
 
     this.History.listen(location => {
