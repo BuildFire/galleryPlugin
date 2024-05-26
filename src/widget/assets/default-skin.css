@@ -75,12 +75,6 @@
 .pswp__button--fs {
   display: none; }
 
-.pswp--supports-fs .pswp__button--fs {
-  display: block; }
-
-.pswp--fs .pswp__button--fs {
-  background-position: -44px 0; }
-
 .pswp__button--zoom {
   display: none;
   background-position: -88px 0; }
