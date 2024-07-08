@@ -88,7 +88,6 @@ const Home = ({
           const promises = imageList.map(
             item =>
             {
-              item.url +=`&v=${generateRandomNumber()}`;
               return elimanateNotFoundImages(item.url).then(result => {
                   if (result.isValid) {
                       return result.newURL;
