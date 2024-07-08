@@ -52,7 +52,7 @@ const Home = ({
     const seeder = new buildfire.components.aiStateSeeder({
       generateOptions: {
         userMessage: 'Provide me with images that relate to [Traveling]',
-        systemMessage: 'Use https://app.buildfire.com/api/stockImages/?topic=topic&imageType=medium for image URLs, don\'\t use "topic" word as a topic  , A maximum of 2 comma-separated topics can be used for each URL, make sure to generate 10 images',
+        systemMessage: 'Use https://app.buildfire.com/api/stockImages/?topic={topic}&imageType=medium for image URLs, and use "random" as a default, A maximum of 2 comma-separated topic can be used for each URL, make sure to generate 10 images',
         hintText: 'Replace values between brackets to match your requirements.',
         maxRecords: 10,
         jsonTemplate: {
