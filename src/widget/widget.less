@@ -8,11 +8,10 @@
 }
 html {
   font-size: 16px;
-  padding-top: var(--bf-safe-area-inset-top);
-  padding-bottom: var(--bf-safe-area-inset-bottom);
 }
 body {
   font-family: 'Conv_apercu_regular', 'Helvetica', 'Sans-Serif', 'Arial';
+  padding-top: var(--bf-safe-area-inset-top);
 }
 /* Text  */
 p,
@@ -188,11 +187,11 @@ input[type='text'] {
 
 /*///////////////////////////////// Plugin Container ///////////////////////////////// */
 .plugin__container {
-    padding-bottom: calc(5rem + var(--bf-safe-area-inset-bottom));
+  padding-bottom: 5rem;
   max-height: 100vh;
   overflow: scroll;
   &.nopadding {
-    padding-bottom: calc(var(--bf-safe-area-inset-top) + var(--bf-safe-area-inset-bottom));
+    padding-bottom: var(--bf-safe-area-inset-bottom);
   }
 }
 .plugin__container a {
