@@ -4,6 +4,7 @@
   "pluginDescription": "Showcase visual content effortlessly with the Image Gallery plugin, allowing users to browse, explore, and enjoy high-quality images in an organized and interactive display.",
   "pluginKeywords":"instagram,gallery,picture,image,photo",
   "supportEmail":"support@buildfire.com",
+  "supportSite": "https://help.appdocumentation.com/how-to-use-the-image-gallery-plugin",
   "control": {
     "content":{
       "enabled":true

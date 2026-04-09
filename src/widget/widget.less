@@ -11,6 +11,7 @@ html {
 }
 body {
   font-family: 'Conv_apercu_regular', 'Helvetica', 'Sans-Serif', 'Arial';
+  padding-top: var(--bf-safe-area-inset-top);
 }
 /* Text  */
 p,
@@ -98,9 +99,6 @@ input[type='text'] {
 }
 /*///////////////////////////////// Plugin Navigation ///////////////////////////////// */
 .plugin__nav {
-  position: absolute;
-  bottom: 0;
-  left: 0;
   z-index: 3;
   background-color: #fff;
   box-shadow: 0 0 0.25rem 0 rgba(0, 0, 0, 0.2);
@@ -109,7 +107,20 @@ input[type='text'] {
   border-radius: 0.5rem;
   height: 3rem;
   overflow: hidden;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
 }
+html[safe-area="true"] .plugin__nav {
+  margin-bottom: var(--bf-safe-area-inset-bottom);
+}
+
 .plugin__nav nav {
   display: flex;
   width: 100%;
@@ -183,7 +194,7 @@ input[type='text'] {
   max-height: 100vh;
   overflow: scroll;
   &.nopadding {
-    padding-bottom: 0px;
+    padding-bottom: var(--bf-safe-area-inset-bottom);
   }
 }
 .plugin__container a {
@@ -381,7 +392,7 @@ input[type='text'] {
 /*///////////////////////////////// Full Screen Media Holder ///////////////////////////////// */
 .media__holder--main {
   height: 100vh;
-  padding-bottom: calc(4rem + env(safe-area-inset-bottom));
+  padding-bottom: 4rem;
   width: 100vw;
   display: flex;
   background-color: #000;
@@ -417,12 +428,11 @@ input[type='text'] {
 /*///////////////////////////////// Footer Actions ///////////////////////////////// */
 .footer__actions {
   position: absolute;
-  bottom: 0;
   width: 100%;
   display: flex;
   justify-content: center;
   padding: 0.75rem;
-  padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
+  padding-bottom: 0.75rem;
 }
 .footer__actions .btn {
   margin: 0 1rem;
