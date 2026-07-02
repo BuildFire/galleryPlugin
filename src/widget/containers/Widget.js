@@ -3,10 +3,7 @@ import { hot } from 'react-hot-loader/root';
 import { Route, Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 
-import PhotoSwipe from '../assets/photoswipe.min.js';
-import photoSwipeUIdefault from '../assets/photoswipe-ui-default.min.js';
-
-import { ViewFolder, Folders, Gallery, NavBar, PswpGallery } from '.';
+import { ViewFolder, Folders, Gallery, NavBar } from '.';
 
 const {
   datastore,
@@ -15,18 +12,14 @@ const {
   navigation,
   appearance,
   getContext,
-  device,
-  spinner,
   bookmarks,
-  deeplink,
-  imageLib
+  deeplink
 } = window.buildfire;
 
 class Widget extends Component {
   constructor(props) {
     super(props);
     this.History = createMemoryHistory();
-    this.gallery = null;
     this.state = {
       images: [],
       folders: [],
@@ -34,8 +27,7 @@ class Widget extends Component {
       folder: null,
       view: 'gallery',
       showImageModal: false,
-      index: 0,
-      pswpOpen: false
+      index: 0
     };
   }
 
@@ -55,80 +47,31 @@ class Widget extends Component {
   };
 
   viewImage = src => {
-    spinner.show();
     const { images, folder } = { ...this.state };
     const folderImages = folder ? folder.images : null;
+    const mediaSource = folderImages || images;
 
-    const index = (folderImages || images).findIndex(image => image.src === src);
-    const pswpEle = document.getElementsByClassName('pswp')[0];
-    const shareEle = document.getElementsByClassName('pswp__button--share')[0];
-    shareEle.addEventListener('click', this.shareImage);
-    const options = {
-      index,
-      getDoubleTapZoom: (isMouseClick, item) => {
-        if (isMouseClick) {
-          return 1;
-        }
-        return item.initialZoomLevel < 0.7 ? 2 : 1.33;
+    if (!mediaSource || !mediaSource.length) {
+      return;
+    }
+
+    const index = mediaSource.findIndex(image => image.src === src);
+    const media = mediaSource.map(image => ({
+      imageSrc: image.src,
+    }));
+
+    buildfire.mediaPreviewer.show(
+      {
+        media,
+        index: index >= 0 ? index : 0,
+        enableShare: true,
       },
-      maxSpreadZoom: 4,
-      spacing: 0,
-      preload: [1, 1]
-    };
-
-    const dimensionsTestPromises = (folderImages || images).map(img => new Promise(resolve => {
-      if (img.width < 5 || img.height < 5) {
-        const image = new Image();
-        image.onload = () => resolve({ width: image.naturalWidth, height: image.naturalHeight });
-        image.src = img.src;
-        image.originalSrc = img.src;
-      } else {
-        resolve({ width: img.width, height: img.height });
+      err => {
+        if (err) {
+          console.error(err);
+        }
       }
-    }))
-    
-    Promise.all(dimensionsTestPromises)
-      .then(dimensions => {
-        const galleryItems = (folderImages || images).map((img, index) => {
-          const { width, height } = dimensions[index] ? dimensions[index] : img;
-          const croppedSrc = imageLib.cropImage(img.src, {
-            width,
-            height,
-            disablePixelRatio: true
-          });
-          const msrc = imageLib.cropImage(img.src, {
-            width: width / 2,
-            height: height / 2,
-            compression: 20,
-            disablePixelRatio: true
-          });
-    
-          return {
-            src: croppedSrc,
-            sourceImg: img.src,
-            msrc,
-            w: width,
-            h: height
-          };
-        });
-        this.gallery = new PhotoSwipe(pswpEle, photoSwipeUIdefault, galleryItems, options);
-        this.gallery.init();
-    
-        this.setState(() => ({ pswpOpen: true }));
-    
-        this.gallery.listen('close', () => {
-          spinner.hide();
-          this.setState(() => ({ pswpOpen: false }));
-        });
-        this.gallery.listen('imageLoadComplete', () => spinner.hide());
-      });
-  };
-
-  shareImage = () => {
-    spinner.show();
-    const { sourceImg } = this.gallery.currItem;
-    const obj = { image: sourceImg };
-    device.share(obj, () => spinner.hide());
+    );
   };
 
   bookmark = () => {
@@ -269,10 +212,7 @@ class Widget extends Component {
 
     const goBack = navigation.onBackButtonClick;
     navigation.onBackButtonClick = () => {
-      const { pswpOpen } = this.state;
-      if (pswpOpen) {
-        this.gallery.close();
-      } else if (this.History.location.pathname === '/') {
+      if (this.History.location.pathname === '/') {
         goBack();
       } else {
         history.pop();
@@ -343,7 +283,6 @@ class Widget extends Component {
             render={() => <ViewFolder folder={folder} viewImage={this.viewImage} />}
           />
         </Router>
-        <PswpGallery />
       </div>
     );
   }
