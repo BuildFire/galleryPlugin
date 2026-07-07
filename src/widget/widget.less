@@ -117,7 +117,10 @@ input[type='text'] {
   gap: 1rem;
   padding: 1rem 0;
 }
-html[safe-area="true"] .plugin__nav {
+html[safe-area="true"] .plugin__nav:not(.plugin__nav--detail) {
+  margin-bottom: var(--bf-safe-area-inset-bottom);
+}
+html[safe-area="true"] .plugin__nav.plugin__nav--detail {
   padding-bottom: var(--bf-safe-area-inset-bottom);
 }
 
